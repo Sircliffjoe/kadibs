@@ -29,7 +29,7 @@ gem "image_processing", "~> 1.2"
 
 gem "devise", "~> 4.9"
 gem "pundit", "~> 2.4"
-gem "paper_trail", "~> 15.2"
+gem "paper_trail", "~> 17.0"
 gem "aasm", "~> 5.5"
 gem "friendly_id", "~> 5.5"
 gem "discard", "~> 1.3"
