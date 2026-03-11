@@ -27,7 +27,7 @@ gem "image_processing", "~> 1.2"
 # Kadibs CMMS Core Dependencies
 # =============================================================================
 
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "pundit", "~> 2.4"
 gem "paper_trail", "~> 15.2"
 gem "aasm", "~> 5.5"
