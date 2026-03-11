@@ -1,0 +1,18 @@
+<%= content_for :title, "Edit #{@purchase_requisition.number} - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Purchase Requisitions", purchase_requisitions_path, class: "breadcrumb-item" %>
+        <span class="breadcrumb-separator">/</span>
+        <%= link_to @purchase_requisition.number, @purchase_requisition, class: "breadcrumb-item" %>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Edit</span>
+      </nav>
+      <h1>Edit Purchase Requisition</h1>
+    </div>
+  </div>
+
+  <%= render "form", purchase_requisition: @purchase_requisition %>
+</div>

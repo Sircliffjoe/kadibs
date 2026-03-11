@@ -1,0 +1,96 @@
+<%= render "shared/form_styles" %>
+
+<%= form_with(model: location, local: true, class: "resource-form") do |f| %>
+  <% if location.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(location.errors.count, "error") %> prevented saving:</h4>
+      <ul>
+        <% location.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Basic Information</h3>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :name, "Location Name *", class: "form-label" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "e.g. Main Warehouse" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :location_type, "Type *", class: "form-label" %>
+        <%= f.select :location_type, 
+            Location::LOCATION_TYPES.map { |t| [t.titleize, t] }, 
+            { prompt: "Select Type" }, class: "form-select" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :parent_id, "Parent Location", class: "form-label" %>
+        <%= f.collection_select :parent_id, 
+            Location.where.not(id: location.id).order(:name), 
+            :id, :name, 
+            { prompt: "None (Root Location)" }, 
+            { class: "form-select" } %>
+      </div>
+      
+      <div class="form-group full">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-input", rows: 3 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Address & Coordinates</h3>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :street, "Street Address", class: "form-label" %>
+        <%= f.text_field :street, class: "form-input" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :city, class: "form-label" %>
+        <%= f.text_field :city, class: "form-input" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :state, "State/Province", class: "form-label" %>
+        <%= f.text_field :state, class: "form-input" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :postal_code, "ZIP/Postal Code", class: "form-label" %>
+        <%= f.text_field :postal_code, class: "form-input" %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :country, class: "form-label" %>
+        <%= f.text_field :country, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :latitude, class: "form-label" %>
+        <%= f.number_field :latitude, class: "form-input", step: :any %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :longitude, class: "form-label" %>
+        <%= f.number_field :longitude, class: "form-input", step: :any %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to "Cancel", locations_path, class: "btn btn-outline" %>
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

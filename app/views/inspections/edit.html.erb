@@ -1,0 +1,19 @@
+<%= content_for :title, "Edit Inspection - Kadibs" %>
+<%= render "shared/table_styles" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Inspections", inspections_path, class: "breadcrumb-item" %>
+        <span class="breadcrumb-separator">/</span>
+        <%= link_to @inspection.title, @inspection, class: "breadcrumb-item" %>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Edit</span>
+      </nav>
+      <h1>Edit Inspection</h1>
+    </div>
+  </div>
+
+  <%= render "form", inspection: @inspection %>
+</div>

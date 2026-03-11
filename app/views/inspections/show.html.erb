@@ -1,0 +1,289 @@
+<%= content_for :title, "#{@inspection.title} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="insp-breadcrumb">
+  <%= link_to "Inspections", inspections_path, class: "insp-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="insp-breadcrumb-current"><%= @inspection.title %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="insp-hero">
+  <div class="insp-hero-bg"></div>
+  <div class="insp-hero-content">
+    <div class="insp-hero-left">
+      <div class="insp-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <path d="M9 14l2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="insp-hero-info">
+        <h1 class="insp-hero-title"><%= @inspection.title %></h1>
+        <div class="insp-hero-meta">
+          <% if @inspection.scheduled_date.present? %>
+            <span class="insp-hero-date">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <%= @inspection.scheduled_date.strftime("%B %d, %Y") %>
+            </span>
+          <% end %>
+          <span class="insp-hero-sep">•</span>
+          <span class="insp-hero-inspector">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <%= @inspection.inspector&.full_name || "Unassigned" %>
+          </span>
+          <% if @inspection.asset.present? %>
+            <span class="insp-hero-sep">•</span>
+            <span class="insp-hero-asset">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+              <%= @inspection.asset.name %>
+            </span>
+          <% end %>
+        </div>
+        <div class="insp-hero-badges">
+          <span class="insp-pill insp-pill-<%= @inspection.status.gsub('_', '-') %>">
+            <span class="insp-pill-dot"></span>
+            <%= @inspection.status.titleize %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="insp-hero-actions">
+      <% if @inspection.pending? %>
+        <%= button_to "Start Inspection", start_inspection_path(@inspection), class: "insp-action-btn insp-action-success" %>
+      <% elsif @inspection.in_progress? %>
+        <%= button_to "Complete", complete_inspection_path(@inspection), class: "insp-action-btn insp-action-primary" %>
+        <%= button_to "Fail", fail_inspection_path(@inspection), class: "insp-action-btn insp-action-danger" %>
+      <% end %>
+      <%= link_to edit_inspection_path(@inspection), class: "insp-action-btn insp-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="insp-layout">
+  <div class="insp-main">
+    <!-- Checklist Card -->
+    <div class="insp-card">
+      <div class="insp-card-header">
+        <h3>Checklist</h3>
+        <% if @inspection.inspection_items.any? %>
+          <% total = @inspection.inspection_items.count; done = @inspection.inspection_items.where(checked: true).count %>
+          <span class="insp-card-badge"><%= done %>/<%= total %> completed</span>
+        <% end %>
+      </div>
+      <div class="insp-card-body">
+        <% if @inspection.inspection_items.any? %>
+          <div class="insp-checklist">
+            <% @inspection.inspection_items.each do |item| %>
+              <div class="insp-check-row <%= 'checked' if item.checked %>">
+                <%= button_to toggle_item_inspection_path(@inspection, item_id: item.id), method: :post, class: "insp-check-toggle" do %>
+                  <div class="insp-checkbox">
+                    <% if item.checked %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    <% end %>
+                  </div>
+                <% end %>
+                <div class="insp-check-content">
+                  <span class="insp-check-label"><%= item.description %></span>
+                  <% if item.notes.present? %>
+                    <span class="insp-check-note">Note: <%= item.notes %></span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="insp-empty">No checklist items defined.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Description Card -->
+    <div class="insp-card">
+      <div class="insp-card-header"><h3>Description / Scope</h3></div>
+      <div class="insp-card-body">
+        <div class="insp-prose"><%= simple_format(@inspection.description.presence || "No description provided.") %></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="insp-sidebar">
+    <div class="insp-card">
+      <div class="insp-card-header"><h3>Related Info</h3></div>
+      <div class="insp-card-body">
+        <div class="insp-info-list">
+          <div class="insp-info-row">
+            <span class="insp-info-label">Asset</span>
+            <span class="insp-info-value">
+              <% if @inspection.asset %>
+                <%= link_to @inspection.asset.name, @inspection.asset, class: "insp-link" %>
+              <% else %>—<% end %>
+            </span>
+          </div>
+          <div class="insp-info-row">
+            <span class="insp-info-label">Work Order</span>
+            <span class="insp-info-value">
+              <% if @inspection.work_order %>
+                <%= link_to "WO ##{@inspection.work_order.id}", @inspection.work_order, class: "insp-link" %>
+              <% else %>—<% end %>
+            </span>
+          </div>
+          <div class="insp-info-row">
+            <span class="insp-info-label">Created By</span>
+            <span class="insp-info-value"><%= @inspection.inspector&.full_name || "System" %></span>
+          </div>
+          <div class="insp-info-row">
+            <span class="insp-info-label">Scheduled Date</span>
+            <span class="insp-info-value"><%= @inspection.scheduled_date&.strftime("%b %d, %Y") || "—" %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── Inspection Breadcrumb ─── */
+  .insp-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .insp-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .insp-breadcrumb-link:hover { text-decoration: underline; }
+  .insp-breadcrumb-current { color: #64748b; }
+
+  /* ─── Inspection Hero Banner ─── */
+  .insp-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .insp-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .insp-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .insp-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .insp-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .insp-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .insp-hero-icon svg { width: 32px; height: 32px; }
+  .insp-hero-info { min-width: 0; flex: 1; }
+  .insp-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0 0 0.35rem; letter-spacing: -0.02em; line-height: 1.2; }
+  .insp-hero-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.82rem; color: #94a3b8; }
+  .insp-hero-sep { color: #475569; }
+  .insp-hero-date, .insp-hero-inspector, .insp-hero-asset { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+
+  /* ─── Inspection Badges ─── */
+  .insp-hero-badges { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .insp-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .insp-pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .insp-pill-pending { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .insp-pill-pending .insp-pill-dot { background: #60a5fa; }
+  .insp-pill-in-progress { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .insp-pill-in-progress .insp-pill-dot { background: #fbbf24; }
+  .insp-pill-completed { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .insp-pill-completed .insp-pill-dot { background: #4ade80; }
+  .insp-pill-failed { background: rgba(239,68,68,0.15); color: #f87171; }
+  .insp-pill-failed .insp-pill-dot { background: #f87171; }
+
+  /* ─── Inspection Action Buttons ─── */
+  .insp-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+  .insp-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .insp-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .insp-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+  .insp-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .insp-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+  .insp-action-success { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .insp-action-success:hover { background: rgba(34,197,94,0.3); }
+  .insp-action-danger { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .insp-action-danger:hover { background: rgba(239,68,68,0.3); }
+
+  /* ─── Layout Grid ─── */
+  .insp-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .insp-main { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .insp-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .insp-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .insp-card-header h3 { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0; }
+  .insp-card-badge {
+    font-size: 0.75rem; font-weight: 500; color: #64748b;
+    background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 999px;
+  }
+  .insp-card-body { padding: 1.25rem; }
+
+  /* ─── Checklist ─── */
+  .insp-checklist { display: flex; flex-direction: column; }
+  .insp-check-row {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; transition: background 0.15s;
+  }
+  .insp-check-row:last-child { border-bottom: none; }
+  .insp-check-row:hover { background: #f8fafc; margin: 0 -1.25rem; padding-left: 1.25rem; padding-right: 1.25rem; }
+
+  .insp-check-toggle { background: none; border: none; padding: 0; cursor: pointer; margin-top: 2px; }
+  .insp-checkbox {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid #cbd5e1;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+  }
+  .insp-checkbox svg { width: 13px; height: 13px; display: none; }
+  .insp-check-row.checked .insp-checkbox { background: #6366f1; border-color: #6366f1; }
+  .insp-check-row.checked .insp-checkbox svg { display: block; color: white; }
+
+  .insp-check-content { flex: 1; min-width: 0; }
+  .insp-check-label { font-size: 0.9rem; font-weight: 500; color: #1e293b; display: block; }
+  .insp-check-row.checked .insp-check-label { text-decoration: line-through; color: #94a3b8; }
+  .insp-check-note { font-size: 0.8rem; color: #94a3b8; display: block; margin-top: 0.2rem; font-style: italic; }
+  .insp-empty { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+  .insp-prose { color: #475569; line-height: 1.7; font-size: 0.9rem; }
+  .insp-prose p { margin: 0 0 0.5rem; }
+
+  /* ─── Related Info ─── */
+  .insp-info-list { display: flex; flex-direction: column; }
+  .insp-info-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .insp-info-row:last-child { border-bottom: none; }
+  .insp-info-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
+  .insp-info-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .insp-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .insp-link:hover { text-decoration: underline; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .insp-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .insp-hero-left { flex-direction: column; align-items: flex-start; }
+    .insp-hero-actions { width: 100%; }
+    .insp-action-btn { flex: 1; justify-content: center; }
+    .insp-layout { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,168 @@
+<%= content_for :title, "Asset Performance Report - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="rpt-breadcrumb">
+  <%= link_to "Reports", reports_dashboard_path, class: "rpt-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="rpt-breadcrumb-current">Asset Performance</span>
+</div>
+
+<!-- Header -->
+<div class="rpt-hero">
+  <div class="rpt-hero-bg"></div>
+  <div class="rpt-hero-content">
+    <div class="rpt-hero-left">
+      <div class="rpt-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <path d="M12 12h.01"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="rpt-hero-title">Asset Performance</h1>
+        <p class="rpt-hero-sub"><%= @total_assets %> total assets • <%= number_to_currency(@total_value) %> total value</p>
+      </div>
+    </div>
+    <div>
+      <%= button_to reports_export_path(format: :csv, report: 'assets'), method: :post, class: "rpt-action-btn" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="rpt-kpi-grid">
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value"><%= @total_assets %></span>
+      <span class="rpt-kpi-label">Total Assets</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#dcfce7;color:#16a34a;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#16a34a;"><%= @status_counts["operational"] || 0 %></span>
+      <span class="rpt-kpi-label">Operational</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#fef3c7;color:#d97706;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#d97706;"><%= @status_counts["under_maintenance"] || @status_counts["under_repair"] || 0 %></span>
+      <span class="rpt-kpi-label">Under Repair</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#dbeafe;color:#2563eb;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#2563eb;"><%= number_to_currency(@total_value, precision: 0) %></span>
+      <span class="rpt-kpi-label">Total Value</span>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="rpt-charts-row">
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Status Distribution</h3></div>
+    <div class="rpt-card-body" style="display:flex;justify-content:center;padding:1.5rem;">
+      <canvas id="assetStatusChart" style="max-height:280px;"></canvas>
+    </div>
+  </div>
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Assets by Category</h3></div>
+    <div class="rpt-card-body" style="display:flex;justify-content:center;padding:1.5rem;">
+      <canvas id="categoryChart" style="max-height:280px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Assets Table -->
+<div class="rpt-card" style="margin-top:1.5rem;">
+  <div class="rpt-card-header">
+    <h3>Asset List</h3>
+    <span class="rpt-badge"><%= @total_assets %> records</span>
+  </div>
+  <div class="rpt-table-wrap">
+    <table class="rpt-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Location</th>
+          <th>Install Date</th>
+          <th>Purchase Price</th>
+          <th>Current Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @assets.any? %>
+          <% @assets.each do |asset| %>
+            <tr>
+              <td><%= link_to asset.name, asset, class: "rpt-link" %></td>
+              <td><%= asset.asset_category&.name || "—" %></td>
+              <td><span class="rpt-pill rpt-st-<%= asset.status.gsub('_', '-') %>"><%= asset.status.titleize %></span></td>
+              <td><%= asset.location&.name || "—" %></td>
+              <td class="rpt-muted"><%= asset.installation_date&.strftime("%b %Y") || "—" %></td>
+              <td><%= number_to_currency(asset.purchase_price) %></td>
+              <td><%= number_to_currency(asset.current_value) %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td colspan="7" class="rpt-empty-cell">No assets found</td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <div style="margin-top:1rem;"><%== pagy_nav(@pagy) %></div>
+<% end %>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Status Doughnut
+    var statusData = <%= raw @status_counts.to_json %>;
+    var statusLabels = Object.keys(statusData).map(function(s) { return s.replace(/_/g, ' ').replace(/\b\w/g, function(l) { return l.toUpperCase(); }); });
+    var statusColors = Object.keys(statusData).map(function(s) {
+      var c = { operational: '#10b981', under_maintenance: '#f59e0b', under_repair: '#f59e0b', out_of_service: '#ef4444', retired: '#6b7280', decommissioned: '#94a3b8' };
+      return c[s] || '#6366f1';
+    });
+
+    new Chart(document.getElementById('assetStatusChart'), {
+      type: 'doughnut',
+      data: { labels: statusLabels, datasets: [{ data: Object.values(statusData), backgroundColor: statusColors, borderWidth: 0, hoverOffset: 8 }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 12 } } } }, cutout: '65%' }
+    });
+
+    // Category Horizontal Bar
+    <% categories = AssetCategory.where(id: @category_counts.keys).pluck(:id, :name).to_h rescue {} %>
+    var catData = <%= raw @category_counts.to_json %>;
+    var catNames = <%= raw categories.to_json %>;
+    var catLabels = Object.keys(catData).map(function(id) { return catNames[id] || 'Uncategorized'; });
+    var catValues = Object.values(catData);
+    var palette = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#ddd6fe','#7c3aed','#4f46e5','#818cf8'];
+
+    new Chart(document.getElementById('categoryChart'), {
+      type: 'bar',
+      data: { labels: catLabels, datasets: [{ data: catValues, backgroundColor: palette.slice(0, catLabels.length), borderRadius: 8, borderSkipped: false, barThickness: 32 }] },
+      options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 12 } }, grid: { color: '#f1f5f9' } }, y: { grid: { display: false }, ticks: { font: { size: 12 } } } } }
+    });
+  });
+</script>
+
+<%= render "shared/report_chart_styles" %>

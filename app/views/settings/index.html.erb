@@ -1,0 +1,233 @@
+<%= content_for :title, "Account Settings - Kadibs" %>
+<%= render "shared/form_styles" %>
+
+<%= render "shared/account_tabs" %>
+
+<div class="account-content">
+  <!-- Password Section -->
+  <section id="password" class="settings-section">
+    <h2>Change Password</h2>
+    <p class="section-description">Update your password to keep your account secure</p>
+    
+    <%= form_with url: settings_password_path, method: :patch, class: "resource-form" do |f| %>
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-group full">
+            <%= label_tag :current_password, class: "form-label" do %>
+              Current Password <span class="required">*</span>
+            <% end %>
+            <%= password_field_tag "user[current_password]", nil, class: "form-input", required: true, autocomplete: "current-password" %>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <%= label_tag :password, class: "form-label" do %>
+              New Password <span class="required">*</span>
+            <% end %>
+            <%= password_field_tag "user[password]", nil, class: "form-input", required: true, autocomplete: "new-password" %>
+            <span class="form-help">Minimum 8 characters</span>
+          </div>
+          
+          <div class="form-group">
+            <%= label_tag :password_confirmation, class: "form-label" do %>
+              Confirm New Password <span class="required">*</span>
+            <% end %>
+            <%= password_field_tag "user[password_confirmation]", nil, class: "form-input", required: true, autocomplete: "new-password" %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <%= submit_tag "Update Password", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </section>
+
+  <!-- Notifications Section -->
+  <section id="notifications" class="settings-section">
+    <h2>Notification Preferences</h2>
+    <p class="section-description">Choose how you want to be notified about activity</p>
+    
+    <%= form_with url: settings_notifications_path, method: :patch, class: "resource-form" do |f| %>
+      <div class="form-section">
+        <div class="notification-option">
+          <div class="notification-info">
+            <h4>Email Notifications</h4>
+            <p>Receive work order updates and alerts via email</p>
+          </div>
+          <label class="toggle-switch">
+            <%= check_box_tag "user[email_notifications]", "1", @user.email_notifications != false, class: "toggle-input" %>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        
+        <div class="notification-option">
+          <div class="notification-info">
+            <h4>Push Notifications</h4>
+            <p>Receive real-time notifications in your browser</p>
+          </div>
+          <label class="toggle-switch">
+            <%= check_box_tag "user[push_notifications]", "1", @user.push_notifications == true, class: "toggle-input" %>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <%= submit_tag "Save Preferences", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </section>
+  
+  <!-- Danger Zone -->
+  <section class="settings-section danger-zone">
+    <h2>Danger Zone</h2>
+    <p class="section-description">Irreversible actions for your account</p>
+    
+    <div class="danger-action">
+      <div class="danger-info">
+        <h4>Sign Out of All Devices</h4>
+        <p>This will sign you out of all browsers and devices</p>
+      </div>
+      <button class="btn btn-outline btn-danger">Sign Out All</button>
+    </div>
+  </section>
+</div>
+
+<style>
+  .account-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .settings-section {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem 2rem;
+  }
+  
+  .settings-section h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.25rem;
+    color: #1e293b;
+  }
+  
+  .section-description {
+    color: #6b7280;
+    margin: 0 0 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Notification Options */
+  .notification-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  .notification-option:last-child { border-bottom: none; }
+  
+  .notification-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
+  
+  .notification-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+  
+  /* Toggle Switch */
+  .toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    cursor: pointer;
+  }
+  
+  .toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 26px;
+    transition: all 0.2s;
+  }
+  
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .toggle-input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  }
+  
+  .toggle-input:checked + .toggle-slider::before {
+    transform: translateX(22px);
+  }
+  
+  /* Danger Zone */
+  .danger-zone {
+    border-color: #fecaca;
+  }
+  
+  .danger-zone h2 {
+    color: #dc2626;
+  }
+  
+  .danger-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #fef2f2;
+    border-radius: 10px;
+  }
+  
+  .danger-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #991b1b;
+  }
+  
+  .danger-info p {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    color: #b91c1c;
+  }
+  
+  .btn-danger {
+    border-color: #fecaca;
+    color: #dc2626;
+  }
+  
+  .btn-danger:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+  }
+</style>

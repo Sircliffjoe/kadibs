@@ -1,0 +1,383 @@
+<%= content_for :title, "#{@part.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="pt-breadcrumb">
+  <%= link_to "Parts & Inventory", parts_path, class: "pt-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="pt-breadcrumb-current"><%= @part.part_number %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="pt-hero">
+  <div class="pt-hero-bg"></div>
+  <div class="pt-hero-content">
+    <div class="pt-hero-left">
+      <div class="pt-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <div class="pt-hero-info">
+        <h1 class="pt-hero-title"><%= @part.name %></h1>
+        <div class="pt-hero-meta">
+          <span class="pt-hero-code">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <%= @part.part_number %>
+          </span>
+          <span class="pt-hero-sep">•</span>
+          <span class="pt-hero-cost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            $<%= number_with_precision(@part.unit_cost || 0, precision: 2) %>
+          </span>
+          <span class="pt-hero-sep">•</span>
+          <span class="pt-hero-uom"><%= @part.unit_of_measure %></span>
+          <% if @part.preferred_supplier %>
+            <span class="pt-hero-sep">•</span>
+            <span class="pt-hero-supplier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+              <%= @part.preferred_supplier.name %>
+            </span>
+          <% end %>
+        </div>
+        <div class="pt-hero-badges">
+          <% total_qty = @inventory_items.sum { |i| i.quantity rescue 0 } %>
+          <% min = @part.minimum_stock || 0 %>
+          <% if total_qty <= 0 %>
+            <span class="pt-pill pt-pill-danger"><span class="pt-pill-dot"></span>Out of Stock</span>
+          <% elsif total_qty <= min %>
+            <span class="pt-pill pt-pill-warning"><span class="pt-pill-dot"></span>Low Stock</span>
+          <% else %>
+            <span class="pt-pill pt-pill-success"><span class="pt-pill-dot"></span>In Stock</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="pt-hero-actions">
+      <%= link_to edit_part_path(@part), class: "pt-action-btn pt-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Part
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="pt-layout">
+  <div class="pt-main">
+    <!-- Stock Levels Card -->
+    <div class="pt-card">
+      <div class="pt-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21V12h6v9"/></svg>
+          Stock Levels by Warehouse
+        </h3>
+        <% if @inventory_items.any? %>
+          <span class="pt-card-badge"><%= @inventory_items.count %> locations</span>
+        <% end %>
+      </div>
+      <% if @inventory_items.any? %>
+        <div class="pt-table-wrap">
+          <table class="pt-table">
+            <thead>
+              <tr>
+                <th>Warehouse</th>
+                <th>Location</th>
+                <th style="text-align:right;">Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @inventory_items.each do |item| %>
+                <tr>
+                  <td><%= item.warehouse&.name %></td>
+                  <td><%= item.stock_location&.name || '—' %></td>
+                  <td style="text-align:right;">
+                    <span class="pt-qty <%= 'pt-qty-low' if item.quantity <= (@part.minimum_stock || 0) %>">
+                      <%= item.quantity %> <%= @part.unit_of_measure %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="pt-card-body pt-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;color:#cbd5e1;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <p>No stock in any warehouse</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Stock Movements Card -->
+    <div class="pt-card">
+      <div class="pt-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          Recent Stock Movements
+        </h3>
+      </div>
+      <% if @recent_movements.any? %>
+        <div class="pt-table-wrap">
+          <table class="pt-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th style="text-align:right;">Quantity</th>
+                <th>Reference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_movements.each do |movement| %>
+                <tr>
+                  <td><%= movement.created_at.strftime("%b %d, %Y") %></td>
+                  <td>
+                    <span class="pt-move-badge pt-move-<%= movement.movement_type %>">
+                      <%= movement.movement_type&.titleize %>
+                    </span>
+                  </td>
+                  <td style="text-align:right;font-weight:600;"><%= movement.quantity %></td>
+                  <td class="pt-muted"><%= movement.reference_number || '—' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="pt-card-body pt-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;color:#cbd5e1;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <p>No stock movements recorded</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="pt-sidebar">
+    <!-- Part Details Card -->
+    <div class="pt-card">
+      <div class="pt-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Part Details
+        </h3>
+      </div>
+      <div class="pt-card-body">
+        <div class="pt-detail-list">
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Part Number</span>
+            <span class="pt-detail-value pt-mono"><%= @part.part_number %></span>
+          </div>
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Unit Cost</span>
+            <span class="pt-detail-value"><strong>$<%= number_with_precision(@part.unit_cost || 0, precision: 2) %></strong></span>
+          </div>
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Unit of Measure</span>
+            <span class="pt-detail-value"><%= @part.unit_of_measure %></span>
+          </div>
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Minimum Stock</span>
+            <span class="pt-detail-value"><%= @part.minimum_stock || '—' %></span>
+          </div>
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Reorder Point</span>
+            <span class="pt-detail-value"><%= @part.reorder_level || '—' %></span>
+          </div>
+          <div class="pt-detail-row">
+            <span class="pt-detail-label">Lead Time</span>
+            <span class="pt-detail-value"><%= @part.lead_time_days ? "#{@part.lead_time_days} days" : '—' %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferred Supplier Card -->
+    <% if @part.preferred_supplier %>
+      <div class="pt-card">
+        <div class="pt-card-header">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Preferred Supplier
+          </h3>
+        </div>
+        <div class="pt-card-body">
+          <%= link_to @part.preferred_supplier, class: "pt-supplier-link", style: "text-decoration:none;" do %>
+            <div class="pt-supplier-card">
+              <div class="pt-supplier-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <path d="M20 8v6"/>
+                  <path d="M23 11h-6"/>
+                </svg>
+              </div>
+              <div class="pt-supplier-info">
+                <span class="pt-supplier-name"><%= @part.preferred_supplier.name %></span>
+                <span class="pt-supplier-email"><%= @part.preferred_supplier.email %></span>
+              </div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#94a3b8;flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── PT Breadcrumb ─── */
+  .pt-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .pt-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pt-breadcrumb-link:hover { text-decoration: underline; }
+  .pt-breadcrumb-current { color: #64748b; }
+
+  /* ─── PT Hero Banner ─── */
+  .pt-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .pt-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .pt-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .pt-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .pt-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .pt-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .pt-hero-icon svg { width: 32px; height: 32px; }
+  .pt-hero-info { min-width: 0; flex: 1; }
+  .pt-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0 0 0.35rem; letter-spacing: -0.02em; line-height: 1.2; }
+  .pt-hero-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.82rem; color: #94a3b8; }
+  .pt-hero-sep { color: #475569; }
+  .pt-hero-code { display: inline-flex; align-items: center; gap: 0.25rem; color: #a5b4fc; font-family: ui-monospace, monospace; font-weight: 600; }
+  .pt-hero-cost, .pt-hero-uom, .pt-hero-supplier { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+  .pt-hero-badges { display: flex; align-items: center; gap: 0.5rem; }
+  .pt-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .pt-pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .pt-pill-success { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .pt-pill-success .pt-pill-dot { background: #4ade80; }
+  .pt-pill-warning { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .pt-pill-warning .pt-pill-dot { background: #fbbf24; }
+  .pt-pill-danger { background: rgba(239,68,68,0.15); color: #f87171; }
+  .pt-pill-danger .pt-pill-dot { background: #f87171; }
+
+  /* ─── PT Action Buttons ─── */
+  .pt-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; }
+  .pt-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .pt-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .pt-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+
+  /* ─── Layout Grid ─── */
+  .pt-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .pt-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .pt-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .pt-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .pt-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .pt-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .pt-card-badge {
+    font-size: 0.75rem; font-weight: 500; color: #64748b;
+    background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 999px;
+  }
+  .pt-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .pt-detail-list { display: flex; flex-direction: column; }
+  .pt-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .pt-detail-row:last-child { border-bottom: none; }
+  .pt-detail-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
+  .pt-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .pt-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .pt-muted { color: #94a3b8; }
+
+  /* ─── Tables ─── */
+  .pt-table-wrap { overflow-x: auto; }
+  .pt-table { width: 100%; border-collapse: collapse; }
+  .pt-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .pt-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .pt-table tr:last-child td { border-bottom: none; }
+  .pt-table tr:hover { background: #f8fafc; }
+  .pt-qty { font-weight: 600; color: #1e293b; }
+  .pt-qty-low { color: #ef4444; }
+
+  /* ─── Movement Badges ─── */
+  .pt-move-badge { padding: 0.2rem 0.55rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+  .pt-move-receipt { background: #dcfce7; color: #166534; }
+  .pt-move-issue { background: #fee2e2; color: #b91c1c; }
+  .pt-move-adjustment { background: #dbeafe; color: #1d4ed8; }
+  .pt-move-transfer { background: #e0e7ff; color: #4338ca; }
+
+  /* ─── Supplier Card ─── */
+  .pt-supplier-card {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem; border-radius: 10px; border: 1px solid #e2e8f0;
+    transition: all 0.15s; cursor: pointer;
+  }
+  .pt-supplier-card:hover { background: #f8fafc; border-color: #6366f1; }
+  .pt-supplier-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+    display: flex; align-items: center; justify-content: center;
+    color: #6366f1; flex-shrink: 0;
+  }
+  .pt-supplier-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .pt-supplier-name { font-size: 0.875rem; font-weight: 600; color: #1e293b; }
+  .pt-supplier-email { font-size: 0.75rem; color: #94a3b8; }
+
+  /* ─── Empty States ─── */
+  .pt-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 2rem 1.25rem; text-align: center;
+  }
+  .pt-empty p { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .pt-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .pt-hero-left { flex-direction: column; align-items: flex-start; }
+    .pt-hero-actions { width: 100%; }
+    .pt-action-btn { flex: 1; justify-content: center; }
+    .pt-layout { grid-template-columns: 1fr; }
+  }
+</style>

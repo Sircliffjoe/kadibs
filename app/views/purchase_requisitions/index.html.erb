@@ -1,0 +1,112 @@
+<%= content_for :title, "Purchase Requisitions - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1>Purchase Requisitions</h1>
+      <p class="page-subtitle">Manage purchase orders and approvals</p>
+    </div>
+    <div class="page-actions">
+      <%= link_to new_purchase_requisition_path, class: "btn btn-primary" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Requisition
+      <% end %>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <%= form_with url: purchase_requisitions_path, method: :get, class: "filters-form" do |f| %>
+      <div class="filter-group">
+        <%= f.select :status, options_for_select([
+          ["All Statuses", ""],
+          ["Draft", "draft"],
+          ["Pending Approval", "pending_approval"],
+          ["Approved", "approved"],
+          ["Ordered", "ordered"],
+          ["Received", "received"]
+        ], params[:status]), {}, class: "filter-select" %>
+      </div>
+      <%= f.submit "Filter", class: "btn btn-outline" %>
+      <%= link_to "Clear", purchase_requisitions_path, class: "btn btn-text" %>
+    <% end %>
+  </div>
+
+  <div class="data-table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Supplier</th>
+          <th>Requested By</th>
+          <th>Needed By</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @purchase_requisitions.any? %>
+          <% @purchase_requisitions.each do |pr| %>
+            <tr>
+              <td><%= link_to pr.number, pr, class: "table-link" %></td>
+              <td><%= link_to pr.supplier.name, pr.supplier, class: "secondary-link" if pr.supplier %></td>
+              <td><%= pr.requested_by&.full_name %></td>
+              <td>
+                <% if pr.required_date %>
+                  <span class="<%= 'text-danger' if pr.required_date < Date.current && !pr.closed? %>">
+                    <%= pr.required_date.strftime("%b %d, %Y") %>
+                  </span>
+                <% else %>
+                  <span class="text-muted">—</span>
+                <% end %>
+              </td>
+              <td><%= number_to_currency(pr.total_amount) %></td>
+              <td>
+                <span class="status-badge status-<%= pr.status.gsub('_', '-') %>">
+                  <%= pr.status.titleize %>
+                </span>
+              </td>
+              <td><%= pr.created_at.strftime("%b %d") %></td>
+              <td>
+                <div class="table-actions">
+                  <%= link_to purchase_requisition_path(pr), class: "action-btn", title: "View" do %>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <% end %>
+                  <% if policy(pr).edit? %>
+                    <%= link_to edit_purchase_requisition_path(pr), class: "action-btn", title: "Edit" do %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="8" class="empty-table" style="padding: 3rem; text-align: center;">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2" style="width: 48px; height: 48px; margin-bottom: 1rem;">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                <h3 style="color: #1e293b; font-weight: 600; margin-bottom: 0.5rem;">No purchase requisitions found</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Create a requisition to order parts or services.</p>
+                <%= link_to "Create Requisition", new_purchase_requisition_path, class: "btn btn-primary" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @pagy && @pagy.pages > 1 %>
+    <div class="pagination-container">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>
+
+<%= render "shared/table_styles" %>

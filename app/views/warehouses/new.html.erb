@@ -1,0 +1,14 @@
+<%= content_for :title, "New Warehouse - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Warehouses", warehouses_path %> / New
+      </nav>
+      <h1>New Warehouse</h1>
+    </div>
+  </div>
+
+  <%= render "form", warehouse: @warehouse %>
+</div>

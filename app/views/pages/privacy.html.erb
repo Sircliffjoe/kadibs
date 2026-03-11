@@ -1,0 +1,540 @@
+<%= content_for :title, "Privacy Policy - Kadibs" %>
+
+<style>
+  .legal-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    color: white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  .legal-nav {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .legal-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+  
+  .legal-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .legal-logo-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+  }
+  
+  .legal-logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .legal-nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .legal-nav-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.15s;
+  }
+  
+  .legal-nav-links a:hover {
+    color: white;
+  }
+  
+  .legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+  
+  .legal-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  .legal-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    color: white;
+  }
+  
+  .legal-header p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+  }
+  
+  .legal-content {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 3rem;
+  }
+  
+  .legal-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .legal-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  .legal-section h2 {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+  }
+  
+  .legal-section p, .legal-section ul {
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin: 0 0 1rem;
+  }
+  
+  .legal-section ul {
+    padding-left: 1.5rem;
+  }
+  
+  .legal-section li {
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<div class="legal-page">
+  <nav class="legal-nav">
+    <%= link_to root_path, class: "legal-logo" do %>
+      <div class="legal-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <span class="legal-logo-text">Kadibs</span>
+    <% end %>
+    <div class="legal-nav-links">
+      <%= link_to "Home", root_path %>
+      <%= link_to "About", about_path %>
+      <%= link_to "Contact", contact_path %>
+      <%= link_to "Login", new_user_session_path %>
+    </div>
+  </nav>
+
+  <div class="legal-container">
+    <header class="legal-header">
+      <h1>Privacy Policy</h1>
+      <p>Last updated: February 6, 2026</p>
+    </header>
+
+    <div class="legal-content">
+      <div class="legal-section">
+        <h2>1. Introduction</h2>
+        <p>At Kadibs, we respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>2. Data We Collect</h2>
+        <p>We may collect, use, store and transfer different kinds of personal data about you which we have grouped together follows:</p>
+        <ul>
+          <li><strong>Identity Data</strong> includes first name, last name, username or similar identifier.</li>
+          <li><strong>Contact Data</strong> includes billing address, delivery address, email address and telephone numbers.</li>
+          <li><strong>Technical Data</strong> includes internet protocol (IP) address, your login data, browser type and version, time zone setting and location, browser plug-in types and versions, operating system and platform.</li>
+          <li><strong>Usage Data</strong> includes information about how you use our website, products and services.</li>
+        </ul>
+      </div>
+
+      <div class="legal-section">
+        <h2>3. How We Use Your Data</h2>
+        <p>We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:</p>
+        <ul>
+          <li>Where we need to perform the contract we are about to enter into or have entered into with you.</li>
+          <li>Where it is necessary for our legitimate interests (or those of a third party) and your interests and fundamental rights do not override those interests.</li>
+          <li>Where we need to comply with a legal or regulatory obligation.</li>
+        </ul>
+      </div>
+
+      <div class="legal-section">
+        <h2>4. Data Security</h2>
+        <p>We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered or disclosed. In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>5. Contact Us</h2>
+        <p>If you have any questions about this privacy policy or our privacy practices, please contact us at: privacy@kadibs.com</p>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo-text">Kadibs</span>
+        <p>Enterprise CMMS Platform</p>
+      </div>
+      <div class="footer-links">
+        <%= link_to "About", about_path %>
+        <%= link_to "Contact", contact_path %>
+        <%= link_to "Privacy", privacy_path %>
+        <%= link_to "Terms", terms_path %>
+      </div>
+    </div>
+    <p class="footer-copyright">© 2025 Kadibs. All rights reserved.</p>
+  </footer>
+</div>
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --dark: #1e1b4b;
+    --light: #f8fafc;
+    --gray: #64748b;
+  }
+  
+  .landing-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Navigation */
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .nav-link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .nav-link:hover {
+    color: white;
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  
+  .btn-outline:hover {
+    border-color: white;
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+  
+  /* Hero */
+  .hero {
+    padding-bottom: 4rem;
+  }
+  
+  .hero-content {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+  }
+  
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 4rem;
+  }
+  
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .stat-label {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+  }
+  
+  /* Features */
+  .features-section {
+    padding: 6rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4rem;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+  
+  .feature-card:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  
+  .feature-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .feature-card p {
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+  
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+    text-align: center;
+    padding: 6rem 2rem;
+    margin: 4rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .cta-section p {
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 2rem;
+  }
+  
+  /* Footer */
+  .footer {
+    padding: 4rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+  }
+  
+  .footer-brand p {
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.5rem;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .footer-links a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .footer-links a:hover {
+    color: white;
+  }
+  
+  .footer-copyright {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 1rem 1.5rem;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .hero-stats {
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .features-section {
+      padding: 4rem 1.5rem;
+    }
+    
+    .cta-section {
+      margin: 2rem;
+      padding: 4rem 1.5rem;
+    }
+    
+    .footer-content {
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .footer-links {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

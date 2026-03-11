@@ -1,0 +1,76 @@
+<%= render "shared/form_styles" %>
+
+<div data-controller="nested-form">
+  <%= form_with(model: inspection, local: true, class: "resource-form") do |f| %>
+    <% if inspection.errors.any? %>
+      <div class="form-errors">
+        <h4><%= pluralize(inspection.errors.count, "error") %> prohibited this inspection from being saved:</h4>
+        <ul>
+          <% inspection.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-section">
+      <h3 class="form-section-title">Inspection Details</h3>
+      <div class="form-row">
+        <div class="form-group" style="flex: 2;">
+          <%= f.label :title, class: "form-label" %>
+          <%= f.text_field :title, class: "form-input", placeholder: "e.g., Weekly Safety Inspection" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :status, class: "form-label" %>
+          <%= f.select :status, Inspection.aasm.states.map(&:name).map { |s| [s.to_s.titleize, s] }, {}, class: "form-select" %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 2;">
+          <%= f.label :asset_id, "Asset", class: "form-label" %>
+          <%= f.collection_select :asset_id, Asset.all, :id, :name, { prompt: "Select Asset (Optional)" }, class: "form-select" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :scheduled_date, class: "form-label" %>
+          <%= f.date_field :scheduled_date, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-input", placeholder: "Enter detailed instructions or scope..." %>
+      </div>
+    </div>
+
+    <!-- Nested Items -->
+    <div class="form-section">
+      <div class="form-section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 class="form-section-title" style="margin: 0;">Checklist Items</h3>
+        <button type="button" class="btn btn-outline btn-sm" data-action="nested-form#add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 4px;">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Item
+        </button>
+      </div>
+      
+      <div data-nested-form-target="target">
+        <%= f.fields_for :inspection_items do |item_f| %>
+          <%= render "inspection_item_fields", f: item_f %>
+        <% end %>
+      </div>
+
+      <template data-nested-form-target="template">
+        <%= f.fields_for :inspection_items, InspectionItem.new, child_index: "NEW_RECORD" do |item_f| %>
+          <%= render "inspection_item_fields", f: item_f %>
+        <% end %>
+      </template>
+    </div>
+
+    <div class="form-actions">
+      <%= link_to "Cancel", inspections_path, class: "btn btn-outline" %>
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

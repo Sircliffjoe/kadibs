@@ -1,0 +1,173 @@
+<%= content_for :title, "Work Orders - #{@asset.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:1rem;font-size:0.85rem;">
+  <%= link_to "Assets", assets_path, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <%= link_to @asset.name, @asset, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span style="color:#64748b;">Work Orders</span>
+</div>
+
+<!-- Header -->
+<div class="awo-hero">
+  <div class="awo-hero-bg"></div>
+  <div class="awo-hero-content">
+    <div class="awo-hero-left">
+      <div class="awo-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="awo-hero-title">Work Orders</h1>
+        <p class="awo-hero-sub"><%= @asset.name %> — <%= @work_orders.count %> work orders</p>
+      </div>
+    </div>
+    <div>
+      <%= link_to @asset, class: "awo-action-btn" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to Asset
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Work Orders Table -->
+<div class="awo-card">
+  <% if @work_orders.any? %>
+    <div class="awo-table-wrap">
+      <table class="awo-table">
+        <thead>
+          <tr>
+            <th>WO #</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Assigned To</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @work_orders.each do |wo| %>
+            <tr>
+              <td><%= link_to wo.id, wo, class: "awo-link awo-mono" %></td>
+              <td><%= link_to wo.title, wo, class: "awo-link awo-bold" %></td>
+              <td>
+                <span class="awo-status awo-status-<%= wo.status.gsub('_', '-') %>"><%= wo.status.titleize %></span>
+              </td>
+              <td>
+                <% if wo.priority.present? %>
+                  <span class="awo-priority awo-priority-<%= wo.priority %>"><%= wo.priority.titleize %></span>
+                <% else %>—<% end %>
+              </td>
+              <td><%= wo.assigned_to&.full_name || "Unassigned" %></td>
+              <td class="awo-muted"><%= wo.created_at.strftime("%b %d, %Y") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="awo-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;color:#cbd5e1;">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+      <p>No work orders for this asset</p>
+      <%= link_to "Create Work Order", new_work_order_path(asset_id: @asset.id), class: "awo-create-btn" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  /* ─── Hero ─── */
+  .awo-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .awo-hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .awo-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%);
+  }
+  .awo-hero-content {
+    position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between;
+    padding: 1.75rem 2rem; gap: 2rem;
+  }
+  .awo-hero-left { display: flex; align-items: center; gap: 1.25rem; }
+  .awo-hero-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center; color: #a5b4fc;
+  }
+  .awo-hero-icon svg { width: 26px; height: 26px; }
+  .awo-hero-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0; }
+  .awo-hero-sub { font-size: 0.82rem; color: #94a3b8; margin: 0.2rem 0 0; }
+  .awo-action-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border-radius: 10px;
+    font-size: 0.82rem; font-weight: 600; text-decoration: none; color: #e2e8f0;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;
+  }
+  .awo-action-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+
+  /* ─── Card ─── */
+  .awo-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  /* ─── Table ─── */
+  .awo-table-wrap { overflow-x: auto; }
+  .awo-table { width: 100%; border-collapse: collapse; }
+  .awo-table th {
+    padding: 0.75rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .awo-table td {
+    padding: 0.75rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .awo-table tr:last-child td { border-bottom: none; }
+  .awo-table tr:hover { background: #f8fafc; }
+  .awo-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .awo-link:hover { text-decoration: underline; }
+  .awo-mono { font-family: ui-monospace, monospace; font-weight: 600; }
+  .awo-bold { font-weight: 600; }
+  .awo-muted { color: #94a3b8; }
+
+  /* ─── Status ─── */
+  .awo-status {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600;
+  }
+  .awo-status-open { background: #dbeafe; color: #1d4ed8; }
+  .awo-status-in-progress { background: #fef3c7; color: #b45309; }
+  .awo-status-completed { background: #dcfce7; color: #166534; }
+  .awo-status-on-hold { background: #f1f5f9; color: #475569; }
+  .awo-status-cancelled { background: #fee2e2; color: #b91c1c; }
+
+  /* ─── Priority ─── */
+  .awo-priority {
+    display: inline-block; padding: 0.2rem 0.5rem; border-radius: 6px;
+    font-size: 0.7rem; font-weight: 600;
+  }
+  .awo-priority-low { background: #f1f5f9; color: #475569; }
+  .awo-priority-medium { background: #fef3c7; color: #b45309; }
+  .awo-priority-high { background: #fee2e2; color: #b91c1c; }
+  .awo-priority-critical { background: #7f1d1d; color: #fca5a5; }
+
+  /* ─── Empty ─── */
+  .awo-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+    padding: 3rem 1.25rem; text-align: center;
+  }
+  .awo-empty p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+  .awo-create-btn {
+    display: inline-flex; padding: 0.5rem 1rem; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600; background: #6366f1; color: white;
+    text-decoration: none; transition: all 0.15s;
+  }
+  .awo-create-btn:hover { background: #4f46e5; }
+</style>

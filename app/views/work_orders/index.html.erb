@@ -1,0 +1,159 @@
+<%= content_for :title, "Work Orders - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>Work Orders</h1>
+    <p class="page-subtitle">Manage maintenance tasks and repairs</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to new_work_order_path, class: "btn btn-primary" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      New Work Order
+    <% end %>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <%= form_with url: work_orders_path, method: :get, class: "filters-form", data: { turbo_frame: "_top" } do |f| %>
+    <div class="filter-group">
+      <%= f.text_field :search, value: params[:search], placeholder: "Search work orders...", class: "filter-input" %>
+    </div>
+    <div class="filter-group">
+      <%= f.select :status, options_for_select([
+        ["All Statuses", ""],
+        ["Open", "open"],
+        ["Assigned", "assigned"],
+        ["In Progress", "in_progress"],
+        ["On Hold", "on_hold"],
+        ["Completed", "completed"],
+        ["Closed", "closed"]
+      ], params[:status]), {}, class: "filter-select" %>
+    </div>
+    <div class="filter-group">
+      <%= f.select :priority, options_for_select([
+        ["All Priorities", ""],
+        ["Low", "low"],
+        ["Medium", "medium"],
+        ["High", "high"],
+        ["Critical", "critical"]
+      ], params[:priority]), {}, class: "filter-select" %>
+    </div>
+    <%= f.submit "Filter", class: "btn btn-outline" %>
+    <%= link_to "Clear", work_orders_path, class: "btn btn-text" %>
+  <% end %>
+</div>
+
+<!-- Stats Summary -->
+<div class="stats-row">
+  <div class="stat-pill">
+    <span class="stat-pill-value"><%= @work_orders.where(status: 'open').count %></span>
+    <span class="stat-pill-label">Open</span>
+  </div>
+  <div class="stat-pill stat-warning">
+    <span class="stat-pill-value"><%= @work_orders.where(status: 'in_progress').count %></span>
+    <span class="stat-pill-label">In Progress</span>
+  </div>
+  <div class="stat-pill stat-danger">
+    <span class="stat-pill-value"><%= @work_orders.where("due_date < ?", Date.current).count %></span>
+    <span class="stat-pill-label">Overdue</span>
+  </div>
+</div>
+
+<!-- Work Orders Table -->
+<div class="data-table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>WO #</th>
+        <th>Title</th>
+        <th>Asset</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Assigned To</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @work_orders.any? %>
+        <% @work_orders.each do |wo| %>
+          <tr class="<%= 'overdue' if wo.due_date && wo.due_date < Date.current && !%w[completed closed].include?(wo.status) %>">
+            <td class="font-mono"><%= wo.number %></td>
+            <td>
+              <%= link_to wo.title, wo, class: "table-link" %>
+              <% if wo.work_order_type.present? %>
+                <span class="type-badge"><%= wo.work_order_type.titleize %></span>
+              <% end %>
+            </td>
+            <td>
+              <% if wo.asset %>
+                <%= link_to wo.asset.name, wo.asset, class: "secondary-link" %>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <span class="status-badge status-<%= wo.status %>"><%= wo.status.titleize %></span>
+            </td>
+            <td>
+              <span class="priority-badge priority-<%= wo.priority %>"><%= wo.priority&.titleize || 'Medium' %></span>
+            </td>
+            <td>
+              <% if wo.assigned_to %>
+                <div class="user-cell">
+                  <div class="user-avatar-small"><%= wo.assigned_to.first_name&.first %><%= wo.assigned_to.last_name&.first %></div>
+                  <span><%= wo.assigned_to.first_name %> <%= wo.assigned_to.last_name %></span>
+                </div>
+              <% else %>
+                <span class="text-muted">Unassigned</span>
+              <% end %>
+            </td>
+            <td>
+              <% if wo.due_date %>
+                <span class="<%= 'text-danger' if wo.due_date < Date.current %>">
+                  <%= wo.due_date.strftime("%b %d, %Y") %>
+                </span>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <div class="table-actions">
+                <%= link_to wo, class: "action-btn", title: "View" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <% end %>
+                <%= link_to edit_work_order_path(wo), class: "action-btn", title: "Edit" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="8" class="empty-table">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+              <p>No work orders found</p>
+              <%= link_to "Create your first work order", new_work_order_path, class: "btn btn-primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+<% if @pagy && @pagy.pages > 1 %>
+  <div class="pagination-container">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>
+
+<%= render "shared/table_styles" %>

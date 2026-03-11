@@ -1,0 +1,105 @@
+<%= form_with model: part, class: "resource-form" do |f| %>
+  <% if part.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(part.errors.count, "error") %> prevented this part from being saved:</h4>
+      <ul>
+        <% part.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Basic Information</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :name, class: "form-label" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "Part name" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :part_number, class: "form-label" %>
+        <%= f.text_field :part_number, class: "form-input", placeholder: "Part number" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-input", rows: 3, placeholder: "Part description..." %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :part_category_id, "Category", class: "form-label" %>
+        <%= f.collection_select :part_category_id, PartCategory.order(:name), :id, :name, 
+            { include_blank: "Select category..." }, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :preferred_supplier_id, "Preferred Supplier", class: "form-label" %>
+        <%= f.collection_select :preferred_supplier_id, Supplier.order(:name), :id, :name, 
+            { include_blank: "Select supplier..." }, class: "form-select" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Pricing & Units</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :unit_cost, class: "form-label" %>
+        <%= f.number_field :unit_cost, class: "form-input", step: 0.01, min: 0, placeholder: "0.00" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :unit_of_measure, class: "form-label" %>
+        <%= f.select :unit_of_measure, options_for_select([
+          ["Each", "each"],
+          ["Box", "box"],
+          ["Case", "case"],
+          ["Gallon", "gallon"],
+          ["Liter", "liter"],
+          ["Meter", "meter"],
+          ["Foot", "foot"],
+          ["Kilogram", "kg"],
+          ["Pound", "lb"]
+        ], part.unit_of_measure || "each"), {}, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :barcode, class: "form-label" %>
+        <%= f.text_field :barcode, class: "form-input", placeholder: "Barcode" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Inventory Settings</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :minimum_stock, class: "form-label" %>
+        <%= f.number_field :minimum_stock, class: "form-input", min: 0, placeholder: "0" %>
+        <span class="form-help">Alert when stock falls below this level</span>
+      </div>
+      <div class="form-group">
+        <%= f.label :reorder_level, "Reorder Point", class: "form-label" %>
+        <%= f.number_field :reorder_level, class: "form-input", min: 0, placeholder: "0" %>
+        <span class="form-help">Trigger reorder at this level</span>
+      </div>
+      <div class="form-group">
+        <%= f.label :lead_time_days, "Lead Time (days)", class: "form-label" %>
+        <%= f.number_field :lead_time_days, class: "form-input", min: 0, placeholder: "0" %>
+        <span class="form-help">Supplier delivery time</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to "Cancel", parts_path, class: "btn btn-outline" %>
+    <%= f.submit part.persisted? ? "Update Part" : "Add Part", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= render "shared/form_styles" %>

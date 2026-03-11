@@ -1,0 +1,401 @@
+<%= content_for :title, "#{@location.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="loc-breadcrumb">
+  <%= link_to "Locations", locations_path, class: "loc-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="loc-breadcrumb-current"><%= @location.name %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="loc-hero">
+  <div class="loc-hero-bg"></div>
+  <div class="loc-hero-content">
+    <div class="loc-hero-left">
+      <div class="loc-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div class="loc-hero-info">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <h1 class="loc-hero-title"><%= @location.name %></h1>
+          <span class="loc-type-badge"><%= @location.location_type&.titleize %></span>
+        </div>
+        <div class="loc-hero-meta">
+          <span class="loc-hero-path">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <%= @location.full_path %>
+          </span>
+        </div>
+        <% if @location.description.present? %>
+          <p class="loc-hero-desc"><%= @location.description %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="loc-hero-actions">
+      <%= link_to new_location_path(parent_id: @location.id), class: "loc-action-btn loc-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Sub-Location
+      <% end %>
+      <%= link_to new_asset_path(location_id: @location.id), class: "loc-action-btn loc-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Asset
+      <% end %>
+      <%= link_to edit_location_path(@location), class: "loc-action-btn loc-action-primary" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="loc-layout">
+  <div class="loc-main">
+    <!-- Location Details Card -->
+    <div class="loc-card">
+      <div class="loc-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Location Details
+        </h3>
+      </div>
+      <div class="loc-card-body">
+        <div class="loc-detail-list">
+          <div class="loc-detail-row">
+            <span class="loc-detail-label">Description</span>
+            <span class="loc-detail-value"><%= @location.description.presence || "No description provided" %></span>
+          </div>
+          <div class="loc-detail-row">
+            <span class="loc-detail-label">Address</span>
+            <span class="loc-detail-value">
+              <% if @location.full_address.present? %>
+                <%= @location.full_address %>
+              <% else %>
+                <span class="loc-muted">No address provided</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="loc-detail-row">
+            <span class="loc-detail-label">Coordinates</span>
+            <span class="loc-detail-value">
+              <% if @location.latitude.present? && @location.longitude.present? %>
+                <%= @location.latitude %>, <%= @location.longitude %>
+                <a href="https://www.google.com/maps/search/?api=1&query=<%= @location.latitude %>,<%= @location.longitude %>" target="_blank" class="loc-map-link">View Map ↗</a>
+              <% else %>
+                <span class="loc-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="loc-detail-row">
+            <span class="loc-detail-label">Hierarchy</span>
+            <span class="loc-detail-value">
+              <% if @location.parent %>
+                Child of <%= link_to @location.parent.name, @location.parent, class: "loc-link" %>
+              <% else %>
+                <span class="loc-root-badge">Root Location</span>
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-Locations Card -->
+    <div class="loc-card">
+      <div class="loc-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Sub-Locations
+        </h3>
+        <% if @child_locations.any? %>
+          <%= link_to "View All →", children_location_path(@location), class: "loc-header-link" %>
+        <% end %>
+      </div>
+      <% if @child_locations.any? %>
+        <div class="loc-table-wrap">
+          <table class="loc-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th style="text-align:right;">Assets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @child_locations.each do |child| %>
+                <tr>
+                  <td><%= link_to child.name, child, class: "loc-link loc-bold" %></td>
+                  <td><span class="loc-type-pill"><%= child.location_type&.titleize %></span></td>
+                  <td style="text-align:right;font-weight:600;"><%= child.assets.count %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="loc-card-body loc-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <p>No sub-locations</p>
+          <%= link_to "Add Sub-Location", new_location_path(parent_id: @location.id), class: "loc-add-btn" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Assets Card -->
+    <div class="loc-card">
+      <div class="loc-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
+          Assets at this Location
+        </h3>
+        <% if @assets.any? %>
+          <%= link_to "View All →", assets_location_path(@location), class: "loc-header-link" %>
+        <% end %>
+      </div>
+      <% if @assets.any? %>
+        <div class="loc-table-wrap">
+          <table class="loc-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @assets.each do |asset| %>
+                <tr>
+                  <td><%= link_to asset.name, asset, class: "loc-link loc-bold" %></td>
+                  <td><%= asset.asset_category&.name || "—" %></td>
+                  <td><span class="loc-status-pill loc-status-<%= asset.status %>"><%= asset.status&.titleize %></span></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="loc-card-body loc-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+          <p>No assets assigned directly</p>
+          <%= link_to "Add Asset", new_asset_path(location_id: @location.id), class: "loc-add-btn" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="loc-sidebar">
+    <!-- Overview Stats Card -->
+    <div class="loc-card">
+      <div class="loc-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Overview
+        </h3>
+      </div>
+      <div class="loc-card-body">
+        <div class="loc-stats">
+          <div class="loc-stat">
+            <div class="loc-stat-icon loc-stat-indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="loc-stat-info">
+              <span class="loc-stat-value"><%= @location.children.count %></span>
+              <span class="loc-stat-label">Sub-Locations</span>
+            </div>
+          </div>
+          <div class="loc-stat">
+            <div class="loc-stat-icon loc-stat-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+            </div>
+            <div class="loc-stat-info">
+              <span class="loc-stat-value"><%= @location.assets.count %></span>
+              <span class="loc-stat-label">Assets</span>
+            </div>
+          </div>
+          <div class="loc-stat">
+            <div class="loc-stat-icon loc-stat-amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div class="loc-stat-info">
+              <span class="loc-stat-value"><%= @location.work_orders.count %></span>
+              <span class="loc-stat-label">Work Orders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── LOC Breadcrumb ─── */
+  .loc-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .loc-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-breadcrumb-link:hover { text-decoration: underline; }
+  .loc-breadcrumb-current { color: #64748b; }
+
+  /* ─── LOC Hero Banner ─── */
+  .loc-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .loc-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .loc-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .loc-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .loc-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .loc-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .loc-hero-icon svg { width: 32px; height: 32px; }
+  .loc-hero-info { min-width: 0; flex: 1; }
+  .loc-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
+  .loc-type-badge {
+    display: inline-flex; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+    background: rgba(148,163,184,0.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.25);
+  }
+  .loc-hero-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; font-size: 0.82rem; }
+  .loc-hero-path { display: inline-flex; align-items: center; gap: 0.3rem; color: #94a3b8; }
+  .loc-hero-desc { color: #94a3b8; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.5; }
+
+  /* ─── LOC Action Buttons ─── */
+  .loc-hero-actions { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+  .loc-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .loc-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .loc-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+  .loc-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .loc-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+
+  /* ─── Layout Grid ─── */
+  .loc-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .loc-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .loc-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .loc-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .loc-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .loc-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .loc-header-link { font-size: 0.8rem; color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-header-link:hover { text-decoration: underline; }
+  .loc-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .loc-detail-list { display: flex; flex-direction: column; }
+  .loc-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .loc-detail-row:last-child { border-bottom: none; }
+  .loc-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+  .loc-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; max-width: 60%; }
+  .loc-muted { color: #94a3b8; }
+  .loc-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-link:hover { text-decoration: underline; }
+  .loc-bold { font-weight: 600; }
+  .loc-map-link { font-size: 0.75rem; color: #6366f1; text-decoration: none; margin-left: 0.5rem; }
+  .loc-map-link:hover { text-decoration: underline; }
+  .loc-root-badge {
+    display: inline-flex; padding: 0.2rem 0.5rem; border-radius: 6px;
+    font-size: 0.75rem; font-weight: 600; background: #eef2ff; color: #6366f1;
+  }
+
+  /* ─── Tables ─── */
+  .loc-table-wrap { overflow-x: auto; }
+  .loc-table { width: 100%; border-collapse: collapse; }
+  .loc-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .loc-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .loc-table tr:last-child td { border-bottom: none; }
+  .loc-table tr:hover { background: #f8fafc; }
+  .loc-type-pill {
+    display: inline-block; padding: 0.15rem 0.5rem; border-radius: 6px;
+    font-size: 0.7rem; font-weight: 600; background: #f1f5f9; color: #475569;
+  }
+
+  /* ─── Status Pills ─── */
+  .loc-status-pill {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; text-transform: capitalize;
+  }
+  .loc-status-operational { background: #dcfce7; color: #166534; }
+  .loc-status-active { background: #dcfce7; color: #166534; }
+  .loc-status-out_of_service { background: #fee2e2; color: #b91c1c; }
+  .loc-status-decommissioned { background: #f1f5f9; color: #475569; }
+  .loc-status-under_maintenance { background: #fef3c7; color: #b45309; }
+
+  /* ─── Stats ─── */
+  .loc-stats { display: flex; flex-direction: column; gap: 1rem; }
+  .loc-stat { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; }
+  .loc-stat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .loc-stat-indigo { background: #eef2ff; color: #6366f1; }
+  .loc-stat-blue { background: #dbeafe; color: #2563eb; }
+  .loc-stat-amber { background: #fef3c7; color: #d97706; }
+  .loc-stat-info { display: flex; flex-direction: column; }
+  .loc-stat-value { font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+  .loc-stat-label { font-size: 0.78rem; color: #94a3b8; font-weight: 500; }
+
+  /* ─── Empty States ─── */
+  .loc-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 2rem 1.25rem; text-align: center;
+  }
+  .loc-empty p { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+  .loc-add-btn {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500;
+    background: #f1f5f9; color: #475569; text-decoration: none; border: 1px solid #e2e8f0;
+    transition: all 0.15s; margin-top: 0.25rem;
+  }
+  .loc-add-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .loc-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .loc-hero-left { flex-direction: column; align-items: flex-start; }
+    .loc-hero-actions { width: 100%; flex-wrap: wrap; }
+    .loc-action-btn { flex: 1; justify-content: center; min-width: 100px; }
+    .loc-layout { grid-template-columns: 1fr; }
+  }
+</style>

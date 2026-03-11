@@ -1,0 +1,450 @@
+<%= content_for :title, "#{@user.full_name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="usr-breadcrumb">
+  <%= link_to "Users", users_path, class: "usr-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="usr-breadcrumb-current"><%= @user.full_name %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="usr-hero">
+  <div class="usr-hero-bg"></div>
+  <div class="usr-hero-content">
+    <div class="usr-hero-left">
+      <div class="usr-hero-avatar">
+        <span><%= @user.first_name&.first %><%= @user.last_name&.first %></span>
+      </div>
+      <div class="usr-hero-info">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <h1 class="usr-hero-title"><%= @user.full_name %></h1>
+          <span class="usr-pill usr-pill-<%= @user.active? ? 'active' : 'inactive' %>">
+            <span class="usr-pill-dot"></span>
+            <%= @user.active? ? 'Active' : 'Inactive' %>
+          </span>
+        </div>
+        <div class="usr-hero-meta">
+          <% if @user.job_title.present? %>
+            <span class="usr-hero-job">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <%= @user.job_title %>
+            </span>
+          <% end %>
+          <% if @user.department.present? %>
+            <span class="usr-hero-sep">•</span>
+            <span class="usr-hero-dept">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              <%= @user.department %>
+            </span>
+          <% end %>
+          <% if @user.email.present? %>
+            <span class="usr-hero-sep">•</span>
+            <span class="usr-hero-email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <%= @user.email %>
+            </span>
+          <% end %>
+        </div>
+        <% if @user.roles.any? %>
+          <div class="usr-hero-roles">
+            <% @user.roles.each do |role| %>
+              <span class="usr-role-chip"><%= role.name.titleize %></span>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="usr-hero-actions">
+      <% if policy(@user).edit? %>
+        <%= link_to edit_user_path(@user), class: "usr-action-btn usr-action-ghost" do %>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Edit
+        <% end %>
+      <% end %>
+      <% if policy(@user).deactivate? && @user.active? %>
+        <%= button_to deactivate_user_path(@user), method: :patch, class: "usr-action-btn usr-action-danger", form: { data: { turbo_confirm: "Are you sure you want to deactivate this user?" } } do %>
+          Deactivate
+        <% end %>
+      <% elsif policy(@user).activate? && !@user.active? %>
+        <%= button_to activate_user_path(@user), method: :patch, class: "usr-action-btn usr-action-success" do %>
+          Activate
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="usr-layout">
+  <div class="usr-main">
+    <!-- Personal Information Card -->
+    <div class="usr-card">
+      <div class="usr-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Personal Information
+        </h3>
+      </div>
+      <div class="usr-card-body">
+        <div class="usr-detail-list">
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Email</span>
+            <span class="usr-detail-value"><%= mail_to @user.email, class: "usr-link" %></span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Phone</span>
+            <span class="usr-detail-value">
+              <% if @user.phone.present? %>
+                <%= link_to @user.phone, "tel:#{@user.phone}", class: "usr-link" %>
+              <% else %>
+                <span class="usr-muted">Not provided</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Employee ID</span>
+            <span class="usr-detail-value usr-mono"><%= @user.employee_id.presence || "—" %></span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Timezone</span>
+            <span class="usr-detail-value"><%= @user.timezone %></span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Locale</span>
+            <span class="usr-detail-value"><%= @user.locale %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roles & Permissions Card -->
+    <div class="usr-card">
+      <div class="usr-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Roles & Permissions
+        </h3>
+      </div>
+      <div class="usr-card-body">
+        <% if @user.roles.any? %>
+          <div class="usr-roles-wrap">
+            <% @user.roles.each do |role| %>
+              <div class="usr-role-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <%= role.name.titleize %>
+                <% if policy(@user).remove_role? %>
+                  <%= button_to remove_role_user_path(@user, role_id: role.id), method: :delete, class: "usr-role-remove", form: { style: "display:inline;" } do %>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="usr-muted" style="font-size:0.85rem;">No roles assigned.</p>
+        <% end %>
+
+        <% if policy(@user).assign_role? %>
+          <div class="usr-assign-form">
+            <span class="usr-assign-label">Assign Role</span>
+            <%= form_with url: assign_role_user_path(@user), method: :post, class: "usr-form-inline" do |f| %>
+              <%= f.collection_select :role_id, Role.all, :id, :name, { prompt: "Select Role..." }, class: "usr-form-select" %>
+              <%= f.submit "Assign", class: "usr-form-btn" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Recent Work Orders Card -->
+    <% if @recent_work_orders.any? %>
+      <div class="usr-card">
+        <div class="usr-card-header">
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Recent Work Orders
+          </h3>
+          <%= link_to "View All →", work_orders_user_path(@user), class: "usr-header-link" %>
+        </div>
+        <div class="usr-table-wrap">
+          <table class="usr-table">
+            <thead>
+              <tr>
+                <th>WO #</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_work_orders.each do |wo| %>
+                <tr>
+                  <td><%= link_to wo.id, wo, class: "usr-link usr-mono" %></td>
+                  <td><%= link_to wo.title, wo, class: "usr-link usr-bold" %></td>
+                  <td><span class="usr-wo-status usr-wo-<%= wo.status.gsub('_', '-') %>"><%= wo.status.titleize %></span></td>
+                  <td class="usr-muted"><%= wo.created_at.strftime("%b %d, %Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="usr-sidebar">
+    <!-- Quick Stats Card -->
+    <div class="usr-card">
+      <div class="usr-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Quick Stats
+        </h3>
+      </div>
+      <div class="usr-card-body">
+        <div class="usr-stats">
+          <div class="usr-stat">
+            <div class="usr-stat-icon usr-stat-indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div class="usr-stat-info">
+              <span class="usr-stat-value"><%= @recent_work_orders.count %></span>
+              <span class="usr-stat-label">Recent Work Orders</span>
+            </div>
+          </div>
+          <div class="usr-stat">
+            <div class="usr-stat-icon usr-stat-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="usr-stat-info">
+              <span class="usr-stat-value"><%= @user.roles.count %></span>
+              <span class="usr-stat-label">Roles Assigned</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Info Card -->
+    <div class="usr-card">
+      <div class="usr-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Account
+        </h3>
+      </div>
+      <div class="usr-card-body">
+        <div class="usr-detail-list">
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Joined</span>
+            <span class="usr-detail-value"><%= @user.created_at.strftime("%b %d, %Y") %></span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Last Sign In</span>
+            <span class="usr-detail-value"><%= @user.last_sign_in_at&.strftime("%b %d, %Y") || "Never" %></span>
+          </div>
+          <div class="usr-detail-row">
+            <span class="usr-detail-label">Status</span>
+            <span class="usr-detail-value">
+              <span class="usr-status-dot usr-status-<%= @user.active? ? 'on' : 'off' %>"></span>
+              <%= @user.active? ? 'Active' : 'Inactive' %>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── USR Breadcrumb ─── */
+  .usr-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .usr-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-breadcrumb-link:hover { text-decoration: underline; }
+  .usr-breadcrumb-current { color: #64748b; }
+
+  /* ─── USR Hero Banner ─── */
+  .usr-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .usr-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .usr-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .usr-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .usr-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .usr-hero-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: white; font-size: 1.3rem; font-weight: 700;
+    border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+  }
+  .usr-hero-info { min-width: 0; flex: 1; }
+  .usr-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
+  .usr-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .usr-pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .usr-pill-active { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .usr-pill-active .usr-pill-dot { background: #4ade80; }
+  .usr-pill-inactive { background: rgba(148,163,184,0.15); color: #94a3b8; }
+  .usr-pill-inactive .usr-pill-dot { background: #94a3b8; }
+  .usr-hero-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; font-size: 0.82rem; }
+  .usr-hero-sep { color: #475569; }
+  .usr-hero-job, .usr-hero-dept, .usr-hero-email { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+  .usr-hero-roles { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.65rem; }
+  .usr-role-chip {
+    display: inline-flex; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+    background: rgba(99,102,241,0.2); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3);
+  }
+
+  /* ─── USR Action Buttons ─── */
+  .usr-hero-actions { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+  .usr-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .usr-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .usr-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+  .usr-action-danger { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .usr-action-danger:hover { background: rgba(239,68,68,0.3); }
+  .usr-action-success { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .usr-action-success:hover { background: rgba(34,197,94,0.3); }
+
+  /* ─── Layout Grid ─── */
+  .usr-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .usr-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .usr-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .usr-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .usr-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .usr-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .usr-header-link { font-size: 0.8rem; color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-header-link:hover { text-decoration: underline; }
+  .usr-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .usr-detail-list { display: flex; flex-direction: column; }
+  .usr-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .usr-detail-row:last-child { border-bottom: none; }
+  .usr-detail-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
+  .usr-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .usr-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .usr-muted { color: #94a3b8; }
+  .usr-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-link:hover { text-decoration: underline; }
+  .usr-bold { font-weight: 600; }
+
+  /* ─── Roles ─── */
+  .usr-roles-wrap { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .usr-role-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: #eef2ff; color: #4338ca; padding: 0.35rem 0.75rem;
+    border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  }
+  .usr-role-remove {
+    border: none; background: none; color: #4338ca; cursor: pointer; padding: 0;
+    display: inline-flex; align-items: center; opacity: 0.6; transition: opacity 0.15s;
+  }
+  .usr-role-remove:hover { opacity: 1; }
+  .usr-assign-form {
+    border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-top: 0.5rem;
+  }
+  .usr-assign-label {
+    display: block; font-size: 0.75rem; font-weight: 600; color: #64748b;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;
+  }
+  .usr-form-inline { display: flex; gap: 0.5rem; align-items: center; }
+  .usr-form-select {
+    flex: 1; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;
+    font-size: 0.85rem; color: #334155; background: white; min-width: 180px;
+  }
+  .usr-form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+  .usr-form-btn {
+    padding: 0.5rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600; background: #f8fafc; color: #475569;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .usr-form-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+  /* ─── Tables ─── */
+  .usr-table-wrap { overflow-x: auto; }
+  .usr-table { width: 100%; border-collapse: collapse; }
+  .usr-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .usr-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .usr-table tr:last-child td { border-bottom: none; }
+  .usr-table tr:hover { background: #f8fafc; }
+
+  /* ─── WO Status Badges ─── */
+  .usr-wo-status {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600;
+  }
+  .usr-wo-open { background: #dbeafe; color: #1d4ed8; }
+  .usr-wo-in-progress { background: #fef3c7; color: #b45309; }
+  .usr-wo-completed { background: #dcfce7; color: #166534; }
+  .usr-wo-on-hold { background: #f1f5f9; color: #475569; }
+  .usr-wo-cancelled { background: #fee2e2; color: #b91c1c; }
+
+  /* ─── Stats ─── */
+  .usr-stats { display: flex; flex-direction: column; gap: 1rem; }
+  .usr-stat { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; }
+  .usr-stat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .usr-stat-indigo { background: #eef2ff; color: #6366f1; }
+  .usr-stat-blue { background: #dbeafe; color: #2563eb; }
+  .usr-stat-info { display: flex; flex-direction: column; }
+  .usr-stat-value { font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+  .usr-stat-label { font-size: 0.78rem; color: #94a3b8; font-weight: 500; }
+
+  /* ─── Status Dot ─── */
+  .usr-status-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem;
+  }
+  .usr-status-on { background: #22c55e; }
+  .usr-status-off { background: #94a3b8; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .usr-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .usr-hero-left { flex-direction: column; align-items: flex-start; }
+    .usr-hero-actions { width: 100%; flex-wrap: wrap; }
+    .usr-action-btn { flex: 1; justify-content: center; min-width: 100px; }
+    .usr-layout { grid-template-columns: 1fr; }
+  }
+</style>

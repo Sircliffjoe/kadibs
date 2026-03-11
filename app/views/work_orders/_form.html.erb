@@ -1,0 +1,203 @@
+<%= render "shared/form_styles" %>
+
+<%= form_with model: @work_order, class: "resource-form" do |f| %>
+  <% if @work_order.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(@work_order.errors.count, "error") %> prevented this work order from being saved</h4>
+      <ul>
+        <% @work_order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Basic Information -->
+  <div class="form-section">
+    <h3 class="form-section-title">Basic Information</h3>
+    
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :title, class: "form-label" do %>
+          Title <span class="required">*</span>
+        <% end %>
+        <%= f.text_field :title, class: "form-input", placeholder: "Brief description of the work to be performed", required: true %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :description, class: "form-label" do %>
+          Description
+        <% end %>
+        <%= f.text_area :description, class: "form-input", placeholder: "Provide detailed information about the issue or work required...", rows: 4 %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :work_order_type, class: "form-label" do %>
+          Work Order Type <span class="required">*</span>
+        <% end %>
+        <%= f.select :work_order_type, options_for_select([
+          ["Select type...", ""],
+          ["Corrective Maintenance", "corrective"],
+          ["Preventive Maintenance", "preventive"],
+          ["Predictive Maintenance", "predictive"],
+          ["Emergency Repair", "emergency"],
+          ["Inspection", "inspection"],
+          ["Calibration", "calibration"]
+        ], @work_order.work_order_type), {}, class: "form-select", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :priority, class: "form-label" do %>
+          Priority <span class="required">*</span>
+        <% end %>
+        <%= f.select :priority, options_for_select([
+          ["Low", "low"],
+          ["Medium", "medium"],
+          ["High", "high"],
+          ["Critical", "critical"]
+        ], @work_order.priority || "medium"), {}, class: "form-select" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :category, class: "form-label" do %>
+          Category
+        <% end %>
+        <%= f.select :category, options_for_select([
+          ["Select category...", ""],
+          ["Electrical", "electrical"],
+          ["Mechanical", "mechanical"],
+          ["Plumbing", "plumbing"],
+          ["HVAC", "hvac"],
+          ["General", "general"],
+          ["Safety", "safety"],
+          ["IT", "it"]
+        ], @work_order.category), {}, class: "form-select" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assignment & Location -->
+  <div class="form-section">
+    <h3 class="form-section-title">Assignment & Location</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :asset_id, class: "form-label" do %>
+          Asset / Equipment
+        <% end %>
+        <%= f.select :asset_id, 
+            options_from_collection_for_select(@assets || [], :id, :name, @work_order.asset_id),
+            { include_blank: "Select an asset..." },
+            class: "form-select" %>
+        <span class="form-help">The equipment or asset this work order relates to</span>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :location_id, class: "form-label" do %>
+          Location
+        <% end %>
+        <%= f.select :location_id,
+            options_from_collection_for_select(@locations || [], :id, :name, @work_order.location_id),
+            { include_blank: "Select a location..." },
+            class: "form-select" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :assigned_to_id, class: "form-label" do %>
+          Assign To
+        <% end %>
+        <%= f.select :assigned_to_id,
+            options_from_collection_for_select(@technicians || [], :id, :full_name, @work_order.assigned_to_id),
+            { include_blank: "Unassigned" },
+            class: "form-select" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :supervisor_id, class: "form-label" do %>
+          Supervisor
+        <% end %>
+        <%= f.select :supervisor_id,
+            options_from_collection_for_select(@managers || [], :id, :full_name, @work_order.supervisor_id),
+            { include_blank: "Select supervisor..." },
+            class: "form-select" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scheduling -->
+  <div class="form-section">
+    <h3 class="form-section-title">Scheduling</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :scheduled_start, class: "form-label" do %>
+          Scheduled Start
+        <% end %>
+        <%= f.datetime_local_field :scheduled_start, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :scheduled_end, class: "form-label" do %>
+          Scheduled End
+        <% end %>
+        <%= f.datetime_local_field :scheduled_end, class: "form-input" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :due_date, class: "form-label" do %>
+          Due Date
+        <% end %>
+        <%= f.datetime_local_field :due_date, class: "form-input" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :estimated_hours, class: "form-label" do %>
+          Estimated Hours
+        <% end %>
+        <%= f.number_field :estimated_hours, class: "form-input", step: 0.5, min: 0, placeholder: "0.0" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions & Notes -->
+  <div class="form-section">
+    <h3 class="form-section-title">Instructions & Safety</h3>
+    
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :instructions, class: "form-label" do %>
+          Work Instructions
+        <% end %>
+        <%= f.text_area :instructions, class: "form-input", placeholder: "Step-by-step instructions for completing this work order...", rows: 4 %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :safety_notes, class: "form-label" do %>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px; color: #f59e0b;">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          Safety Notes
+        <% end %>
+        <%= f.text_area :safety_notes, class: "form-input", placeholder: "PPE requirements, lockout/tagout procedures, hazards to be aware of...", rows: 3, style: "border-color: #fcd34d;" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <%= link_to "Cancel", work_orders_path, class: "btn btn-outline" %>
+    <%= f.submit @work_order.persisted? ? "Update Work Order" : "Create Work Order", class: "btn btn-primary" %>
+  </div>
+<% end %>

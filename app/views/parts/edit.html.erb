@@ -1,0 +1,14 @@
+<%= content_for :title, "Edit Part - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <div class="breadcrumb">
+      <%= link_to "Parts & Inventory", parts_path %> / <%= link_to @part.name, @part %> / Edit
+    </div>
+    <h1>Edit Part</h1>
+  </div>
+</div>
+
+<div class="form-container">
+  <%= render "form", part: @part %>
+</div>

@@ -1,0 +1,159 @@
+<%= content_for :title, "Parts & Inventory - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>Parts & Inventory</h1>
+    <p class="page-subtitle">Track spare parts and inventory levels</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to new_part_path, class: "btn btn-primary" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add Part
+    <% end %>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <%= form_with url: parts_path, method: :get, class: "filters-form", data: { turbo_frame: "_top" } do |f| %>
+    <div class="filter-group">
+      <%= f.text_field :search, value: params[:search], placeholder: "Search parts...", class: "filter-input" %>
+    </div>
+    <div class="filter-group">
+      <%= f.collection_select :category, PartCategory.order(:name), :id, :name, 
+          { include_blank: "All Categories" }, class: "filter-select" %>
+    </div>
+    <div class="filter-group">
+      <%= f.collection_select :supplier, Supplier.order(:name), :id, :name, 
+          { include_blank: "All Suppliers", selected: params[:supplier] }, class: "filter-select" %>
+    </div>
+    <%= f.submit "Filter", class: "btn btn-outline" %>
+    <%= link_to "Clear", parts_path, class: "btn btn-text" %>
+  <% end %>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-pill">
+    <span class="stat-pill-value"><%= @parts.count %></span>
+    <span class="stat-pill-label">Total Parts</span>
+  </div>
+  <div class="stat-pill stat-danger">
+    <span class="stat-pill-value"><%= @parts.joins(:inventory_items).where("inventory_items.quantity <= parts.minimum_stock").distinct.count rescue 0 %></span>
+    <span class="stat-pill-label">Low Stock</span>
+  </div>
+</div>
+
+<!-- Parts Table -->
+<div class="data-table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Part #</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Supplier</th>
+        <th>On Hand</th>
+        <th>Unit Cost</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @parts.any? %>
+        <% @parts.each do |part| %>
+          <% total_qty = part.inventory_items.sum(:quantity) rescue 0 %>
+          <% is_low_stock = total_qty <= (part.minimum_stock || 0) %>
+          <tr class="<%= 'low-stock' if is_low_stock %>">
+            <td class="font-mono"><%= part.part_number %></td>
+            <td>
+              <%= link_to part.name, part, class: "table-link" %>
+            </td>
+            <td>
+              <% if part.part_category %>
+                <span class="type-badge"><%= part.part_category.name %></span>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <% if part.preferred_supplier %>
+                <%= link_to part.preferred_supplier.name, part.preferred_supplier, class: "secondary-link" %>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <span class="<%= 'qty-low' if is_low_stock %> <%= 'qty-out' if total_qty == 0 %>">
+                <%= total_qty %> <%= part.unit_of_measure %>
+              </span>
+              <% if is_low_stock && total_qty > 0 %>
+                <span class="stock-warning">Low Stock</span>
+              <% elsif total_qty == 0 %>
+                <span class="stock-out">Out of Stock</span>
+              <% end %>
+            </td>
+            <td>$<%= number_with_precision(part.unit_cost || 0, precision: 2) %></td>
+            <td>
+              <div class="table-actions">
+                <%= link_to part, class: "action-btn", title: "View" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <% end %>
+                <%= link_to edit_part_path(part), class: "action-btn", title: "Edit" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="7" class="empty-table">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              <p>No parts found</p>
+              <%= link_to "Add your first part", new_part_path, class: "btn btn-primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @pagy && @pagy.pages > 1 %>
+  <div class="pagination-container">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>
+
+<%= render "shared/table_styles" %>
+
+<style>
+  .low-stock { background: #fef3c7; }
+  .qty-low { color: #b45309; font-weight: 600; }
+  .qty-out { color: #b91c1c; font-weight: 600; }
+  .stock-warning {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 0.65rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+  }
+  .stock-out {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.65rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+  }
+</style>

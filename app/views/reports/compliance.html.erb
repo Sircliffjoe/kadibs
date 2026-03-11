@@ -1,0 +1,184 @@
+<%= content_for :title, "Compliance Analysis - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="rpt-breadcrumb">
+  <%= link_to "Reports", reports_dashboard_path, class: "rpt-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="rpt-breadcrumb-current">Compliance</span>
+</div>
+
+<!-- Header -->
+<div class="rpt-hero">
+  <div class="rpt-hero-bg"></div>
+  <div class="rpt-hero-content">
+    <div class="rpt-hero-left">
+      <div class="rpt-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="rpt-hero-title">Compliance Analysis</h1>
+        <p class="rpt-hero-sub"><%= @pm_schedules.count %> PM schedules monitored</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="rpt-kpi-grid">
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:<%= (@total_compliance || 0) >= 90 ? '#dcfce7' : ((@total_compliance || 0) >= 70 ? '#fef3c7' : '#fee2e2') %>;color:<%= (@total_compliance || 0) >= 90 ? '#16a34a' : ((@total_compliance || 0) >= 70 ? '#d97706' : '#dc2626') %>;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:<%= (@total_compliance || 0) >= 90 ? '#16a34a' : ((@total_compliance || 0) >= 70 ? '#d97706' : '#dc2626') %>;"><%= number_to_percentage(@total_compliance || 0, precision: 1) %></span>
+      <span class="rpt-kpi-label">Overall Compliance</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#fee2e2;color:#dc2626;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#dc2626;"><%= @overdue_pms %></span>
+      <span class="rpt-kpi-label">Overdue PMs</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value"><%= @pm_schedules.count %></span>
+      <span class="rpt-kpi-label">Total Schedules</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#dcfce7;color:#16a34a;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#16a34a;"><%= @pm_schedules.where(active: true).count %></span>
+      <span class="rpt-kpi-label">Active Schedules</span>
+    </div>
+  </div>
+</div>
+
+<!-- Compliance Chart + Gauge -->
+<div class="rpt-charts-row">
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Compliance by Schedule</h3></div>
+    <div class="rpt-card-body" style="padding:1.5rem;">
+      <canvas id="complianceBarChart" style="max-height:280px;width:100%;"></canvas>
+    </div>
+  </div>
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Overall Compliance</h3></div>
+    <div class="rpt-card-body" style="display:flex;justify-content:center;padding:1.5rem;">
+      <canvas id="complianceGauge" style="max-height:280px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- PM Schedules Table -->
+<div class="rpt-card" style="margin-top:1.5rem;">
+  <div class="rpt-card-header">
+    <h3>Preventive Maintenance Schedules</h3>
+    <span class="rpt-badge"><%= @pm_schedules.count %> schedules</span>
+  </div>
+  <div class="rpt-table-wrap">
+    <table class="rpt-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Asset</th>
+          <th>Frequency</th>
+          <th>Compliance</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @pm_schedules.any? %>
+          <% @pm_schedules.each do |pm| %>
+            <tr>
+              <td><%= link_to pm.name, pm, class: "rpt-link" %></td>
+              <td><%= pm.asset&.name || "—" %></td>
+              <td><%= pm.frequency_value %> <%= pm.frequency_unit %></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                  <div style="flex:1;max-width:100px;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;">
+                    <div style="width:<%= pm.compliance_rate %>%;height:100%;background:<%= pm.compliance_rate >= 90 ? '#10b981' : (pm.compliance_rate >= 70 ? '#f59e0b' : '#ef4444') %>;border-radius:3px;"></div>
+                  </div>
+                  <span style="font-size:0.82rem;font-weight:600;color:#334155;"><%= pm.compliance_rate.to_i %>%</span>
+                </div>
+              </td>
+              <td><span class="rpt-pill" style="background:<%= pm.active ? '#dcfce7' : '#f1f5f9' %>;color:<%= pm.active ? '#166534' : '#475569' %>;"><%= pm.active ? 'Active' : 'Inactive' %></span></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td colspan="5" class="rpt-empty-cell">No PM schedules found</td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Compliance by Schedule Bar
+    var pmNames = <%= raw @pm_schedules.map(&:name).to_json %>;
+    var pmRates = <%= raw @pm_schedules.map { |pm| pm.compliance_rate.to_f }.to_json %>;
+    var barColors = pmRates.map(function(r) { return r >= 90 ? '#10b981' : (r >= 70 ? '#f59e0b' : '#ef4444'); });
+
+    new Chart(document.getElementById('complianceBarChart'), {
+      type: 'bar',
+      data: { labels: pmNames, datasets: [{ data: pmRates, backgroundColor: barColors, borderRadius: 6, borderSkipped: false, barThickness: 28 }] },
+      options: {
+        responsive: true, plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' }, ticks: { font: { size: 12 }, callback: function(v) { return v + '%'; } } }, x: { grid: { display: false }, ticks: { font: { size: 11 }, maxRotation: 45 } } }
+      }
+    });
+
+    // Compliance Gauge (semi-doughnut)
+    var rate = <%= @total_compliance || 0 %>;
+    var gaugeColor = rate >= 90 ? '#10b981' : (rate >= 70 ? '#f59e0b' : '#ef4444');
+
+    new Chart(document.getElementById('complianceGauge'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Compliance', 'Remaining'],
+        datasets: [{ data: [rate, 100 - rate], backgroundColor: [gaugeColor, '#f1f5f9'], borderWidth: 0, hoverOffset: 4 }]
+      },
+      options: {
+        responsive: true, rotation: -90, circumference: 180,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        },
+        cutout: '72%'
+      },
+      plugins: [{
+        id: 'gaugeText',
+        afterDraw: function(chart) {
+          var ctx = chart.ctx;
+          var xCenter = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+          var yCenter = chart.chartArea.bottom - 20;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.font = 'bold 2rem system-ui';
+          ctx.fillStyle = gaugeColor;
+          ctx.fillText(rate.toFixed(1) + '%', xCenter, yCenter);
+          ctx.font = '500 0.8rem system-ui';
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText('Compliance Rate', xCenter, yCenter + 20);
+          ctx.restore();
+        }
+      }]
+    });
+  });
+</script>
+
+<%= render "shared/report_chart_styles" %>

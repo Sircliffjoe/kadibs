@@ -1,0 +1,63 @@
+<%= content_for :title, "Invite User - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Users", users_path %> / <span>Invite New</span>
+      </nav>
+      <h1>Invite New User</h1>
+      <p class="page-subtitle">Send an invitation to a new team member</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <%= render "form", user: @user %>
+  </div>
+</div>
+
+<style>
+  .page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  .page-subtitle {
+    color: #64748b;
+    margin: 0.25rem 0 0;
+  }
+
+  .breadcrumb {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+  }
+
+  .breadcrumb a {
+    color: #6366f1;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .breadcrumb a:hover {
+    color: #4f46e5;
+  }
+
+  .form-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>

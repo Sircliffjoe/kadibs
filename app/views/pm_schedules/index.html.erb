@@ -1,0 +1,151 @@
+<%= content_for :title, "Preventive Maintenance - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1>Preventive Maintenance List</h1>
+      <p class="page-subtitle">Schedule and track preventive maintenance</p>
+    </div>
+    <div class="page-actions">
+      <%= link_to calendar_pm_schedules_path, class: "btn btn-outline", data: { turbo: false } do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        </svg>
+        Calendar View
+      <% end %>
+      <%= link_to new_pm_schedule_path, class: "btn btn-primary" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New PM Schedule
+      <% end %>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <%= form_with url: pm_schedules_path, method: :get, class: "filters-form" do |f| %>
+      <div class="filter-group">
+        <%= f.text_field :search, value: params[:search], placeholder: "Search schedules...", class: "filter-input" %>
+      </div>
+      <div class="filter-group">
+        <%= f.select :status, options_for_select([
+          ["All Statuses", ""],
+          ["Active", "active"],
+          ["Inactive", "inactive"]
+        ], params[:status]), {}, class: "filter-select" %>
+      </div>
+      <%= f.submit "Filter", class: "btn btn-outline" %>
+      <%= link_to "Clear", pm_schedules_path, class: "btn btn-text" %>
+    <% end %>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill">
+      <span class="stat-pill-value"><%= @pm_schedules.active.count %></span>
+      <span class="stat-pill-label">Active</span>
+    </div>
+    <div class="stat-pill stat-warning">
+      <span class="stat-pill-value"><%= @pm_schedules.where("next_due_date <= ?", 7.days.from_now).count %></span>
+      <span class="stat-pill-label">Due This Week</span>
+    </div>
+    <div class="stat-pill stat-danger">
+      <span class="stat-pill-value"><%= @pm_schedules.where("next_due_date < ?", Date.current).count %></span>
+      <span class="stat-pill-label">Overdue</span>
+    </div>
+  </div>
+
+  <div class="data-table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Asset</th>
+          <th>Frequency</th>
+          <th>Next Due</th>
+          <th>Assigned To</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @pm_schedules.any? %>
+          <% @pm_schedules.each do |pm| %>
+              <tr class="<%= 'overdue' if pm.next_due_date && pm.next_due_date < Date.current && pm.active? %>">
+              <td><%= link_to pm.name, pm_schedule_path(pm), class: "table-link" %></td>
+              <td>
+                <% if pm.asset %>
+                  <%= link_to pm.asset.name, pm.asset, class: "secondary-link" %>
+                <% else %>
+                  <span class="text-muted">—</span>
+                <% end %>
+              </td>
+              <td>
+                <%= "Every #{pm.frequency_value} #{pm.frequency_unit}" if pm.frequency_value && pm.frequency_unit %>
+              </td>
+              <td>
+                <% if pm.next_due_date %>
+                  <span class="<%= 'text-danger' if pm.next_due_date < Date.current %>">
+                    <%= pm.next_due_date.strftime("%b %d, %Y") %>
+                  </span>
+                <% else %>
+                  <span class="text-muted">—</span>
+                <% end %>
+              </td>
+              <td>
+                <% if pm.default_assignee %>
+                  <%= pm.default_assignee.first_name %> <%= pm.default_assignee.last_name %>
+                <% else %>
+                  <span class="text-muted">Unassigned</span>
+                <% end %>
+              </td>
+              <td><span class="status-badge status-<%= pm.active? ? 'active' : 'inactive' %>"><%= pm.active? ? 'Active' : 'Inactive' %></span></td>
+              <td>
+                <div class="table-actions">
+                  <%= link_to pm_schedule_path(pm), class: "action-btn", title: "View" do %>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <% end %>
+                  <% if pm.active? %>
+                    <%= button_to generate_work_order_pm_schedule_path(pm), method: :post, class: "action-btn", title: "Generate WO" do %>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7" class="empty-table" style="padding: 3rem; text-align: center;">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2" style="width: 48px; height: 48px; margin-bottom: 1rem;">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                </svg>
+                <h3 style="color: #1e293b; font-weight: 600; margin-bottom: 0.5rem;">No PM schedules found</h3>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Get started by creating your first preventive maintenance schedule.</p>
+                <%= link_to "Create your first PM schedule", new_pm_schedule_path, class: "btn btn-primary" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @pagy && @pagy.pages > 1 %>
+    <div class="pagination-container">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>
+
+<%= render "shared/table_styles" %>
+
+<style>
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .status-active { background: #dcfce7; color: #166534; }
+  .status-inactive { background: #f1f5f9; color: #64748b; }
+</style>

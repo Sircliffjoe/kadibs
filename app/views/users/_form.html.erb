@@ -1,0 +1,105 @@
+<%= render "shared/form_styles" %>
+
+<%= form_with(model: user, local: true, class: "resource-form") do |f| %>
+  <% if user.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h4>
+      <ul>
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Personal Information</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :first_name, "First Name *", class: "form-label" %>
+        <%= f.text_field :first_name, class: "form-input", placeholder: "Jane" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :last_name, "Last Name *", class: "form-label" %>
+        <%= f.text_field :last_name, class: "form-input", placeholder: "Doe" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :email, "Email Address *", class: "form-label" %>
+        <%= f.email_field :email, class: "form-input", placeholder: "jane.doe@example.com" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :phone, "Phone Number", class: "form-label" %>
+        <%= f.telephone_field :phone, class: "form-input", placeholder: "+1 (555) 000-0000" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Employment Details</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :employee_id, "Employee ID", class: "form-label" %>
+        <%= f.text_field :employee_id, class: "form-input" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :job_title, "Job Title", class: "form-label" %>
+        <%= f.text_field :job_title, class: "form-input" %>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :department, "Department", class: "form-label" %>
+        <%= f.text_field :department, class: "form-input" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Role Assignment</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group full">
+        <label class="form-label">Assign Roles *</label>
+        <div class="roles-grid">
+          <%= f.collection_check_boxes :role_ids, Role.order(:name), :id, :name do |b| %>
+            <div class="role-checkbox">
+              <%= b.check_box %>
+              <%= b.label %>
+            </div>
+          <% end %>
+        </div>
+        <p class="form-help">Select at least one role for this user.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-section-title">
+      <h3>Preferences</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :timezone, "Timezone", class: "form-label" %>
+        <%= f.time_zone_select :timezone, nil, { default: "UTC" }, { class: "form-select" } %>
+      </div>
+      <div class="form-group">
+        <%= f.label :locale, "Language", class: "form-label" %>
+        <%= f.select :locale, [["English", "en"], ["Spanish", "es"], ["French", "fr"]], { selected: "en" }, { class: "form-select" } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to "Cancel", users_path, class: "btn btn-outline" %>
+    <%= f.submit "Send Invitation", class: "btn btn-primary" %>
+  </div>
+<% end %>

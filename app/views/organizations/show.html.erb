@@ -1,0 +1,326 @@
+<%= content_for :title, "Organization Settings - Kadibs" %>
+<%= render "shared/form_styles" %>
+
+<%= render "shared/account_tabs" %>
+
+<div class="account-content">
+  <div class="organization-layout">
+    <!-- Organization Card -->
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar-large company-avatar">
+          <%= @organization.name&.first&.upcase %>
+        </div>
+        <div class="profile-identity">
+          <h2><%= @organization.name %></h2>
+        </div>
+        <div class="profile-actions">
+          <%= link_to edit_organization_path, class: "btn btn-light" do %>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="profile-details">
+        <div class="detail-row">
+          <span class="detail-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21l18 0M5 21l14 0M6 10l12 0M6 14l12 0M10 2l4 0M12 2l0 19"/>
+            </svg>
+            Company Domain
+          </span>
+          <span class="detail-value"><%= @organization.domain.presence || "Not set" %></span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Contact Email
+          </span>
+          <span class="detail-value"><%= @organization.email.presence || "Not set" %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Phone
+          </span>
+          <span class="detail-value"><%= @organization.phone.presence || "Not set" %></span>
+        </div>
+        
+        <div class="detail-row">
+          <span class="detail-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Address
+          </span>
+          <span class="detail-value text-right">
+            <% if @organization.address.present? %>
+              <%= @organization.address %><br>
+              <%= "#{@organization.city}," if @organization.city.present? %> 
+              <%= @organization.state %> <%= @organization.zip_code %><br>
+              <%= @organization.country %>
+            <% else %>
+              Not set
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stats Only -->
+    <div class="org-sidebar">
+      <div class="profile-stats">
+        <h3>Usage</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value"><%= @organization.users.count %></span>
+            <span class="stat-label">Users</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value"><%= @organization.assets.count %></span>
+            <span class="stat-label">Assets</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .account-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .organization-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .organization-layout { grid-template-columns: 1fr; }
+  }
+  
+  .profile-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    color: white;
+  }
+  
+  .company-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .profile-identity {
+    flex: 1;
+  }
+  
+  .profile-identity h2 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+  
+  .profile-job {
+    margin: 0.25rem 0 0.75rem;
+    opacity: 0.9;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .status-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .status-active {
+    background: #dcfce7;
+    color: #166534;
+  }
+  
+  .profile-actions {
+    flex-shrink: 0;
+  }
+  
+  .btn-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s;
+    backdrop-filter: blur(4px);
+  }
+  
+  .btn-light:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  .btn-light .btn-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .profile-details {
+    padding: 1.5rem 2rem;
+  }
+  
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  .detail-row:last-child { border-bottom: none; }
+  
+  .detail-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  
+  .detail-label svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .detail-value {
+    font-weight: 500;
+    color: #1e293b;
+    max-width: 60%;
+  }
+  
+  .text-right { text-align: right; }
+  
+  .profile-stats {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+  }
+  
+  .profile-stats h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: #374151;
+  }
+  
+  .plan-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .plan-name {
+    font-weight: 600;
+    color: #1e293b;
+  }
+  
+  .plan-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .plan-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+  }
+  
+  .trial-text {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+  }
+  
+  .mt-4 { margin-top: 1rem; }
+  .btn-block { width: 100%; justify-content: center; }
+  
+  .stats-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6366f1;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+</style>

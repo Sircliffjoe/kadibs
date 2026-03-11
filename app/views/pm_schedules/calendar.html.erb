@@ -1,0 +1,186 @@
+<%= content_for :title, "PM Schedule Calendar - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb">
+        <%= link_to "Preventive Maintenance", pm_schedules_path %> / <span>Calendar</span>
+      </div>
+      <h1>Maintenance Calendar</h1>
+      <p class="page-subtitle">Schedule of upcoming maintenance tasks</p>
+    </div>
+    <div class="page-actions">
+      <%= link_to pm_schedules_path, class: "btn btn-outline", data: { turbo: false } do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+        List View
+      <% end %>
+    </div>
+  </div>
+
+  <div class="calendar-container resource-form">
+    <div class="calendar-header">
+      <div class="calendar-nav">
+        <button class="btn btn-icon" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2><%= Date.current.strftime("%B %Y") %></h2>
+        <button class="btn btn-icon" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="calendar-grid">
+      <div class="calendar-day-header">Sun</div>
+      <div class="calendar-day-header">Mon</div>
+      <div class="calendar-day-header">Tue</div>
+      <div class="calendar-day-header">Wed</div>
+      <div class="calendar-day-header">Thu</div>
+      <div class="calendar-day-header">Fri</div>
+      <div class="calendar-day-header">Sat</div>
+      
+      <% 
+        start_date = Date.current.beginning_of_month.beginning_of_week(:sunday)
+        end_date = Date.current.end_of_month.end_of_week(:sunday)
+        today = Date.current
+      %>
+      
+      <% (start_date..end_date).each do |date| %>
+        <div class="calendar-day <%= 'other-month' if date.month != today.month %> <%= 'today' if date == today %>">
+          <div class="day-number"><%= date.day %></div>
+          <div class="day-events">
+            <% @pm_schedules.select { |pm| pm.next_due_date == date }.each do |pm| %>
+              <%= link_to pm_schedule_path(pm), class: "calendar-event event-priority-#{pm.priority}", title: pm.name do %>
+                <%= pm.name.truncate(20) %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/table_styles" %>
+
+<style>
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+...
+
+  /* Reuse shared styles style from other pages */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .calendar-container {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .calendar-day-header {
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+  }
+  
+  .calendar-day-header:last-child {
+    border-right: none;
+  }
+  
+  .calendar-day {
+    min-height: 120px;
+    padding: 0.5rem;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+  }
+  
+  .calendar-day:nth-child(7n) {
+    border-right: none;
+  }
+  
+  .calendar-day.other-month {
+    background: #fcfcfc;
+    color: #cbd5e1;
+  }
+  
+  .calendar-day.today {
+    background: #fdf2f8; 
+  }
+  
+  .day-number {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    text-align: right;
+  }
+  
+  .today .day-number {
+    color: #db2777;
+    font-weight: 700;
+  }
+  
+  .day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .calendar-event {
+    display: block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform 0.1s;
+    color: inherit;
+    background: #f1f5f9;
+  }
+  
+  .calendar-event:hover {
+    transform: scale(1.02);
+    z-index: 10;
+  }
+  
+  .event-priority-critical { background: #fee2e2; color: #991b1b; border-left: 3px solid #ef4444; }
+  .event-priority-high { background: #ffedd5; color: #9a3412; border-left: 3px solid #f97316; }
+  .event-priority-medium { background: #e0f2fe; color: #075985; border-left: 3px solid #0ea5e9; }
+  .event-priority-low { background: #f1f5f9; color: #475569; border-left: 3px solid #94a3b8; }
+</style>

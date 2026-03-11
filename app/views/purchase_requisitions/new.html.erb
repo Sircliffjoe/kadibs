@@ -1,0 +1,16 @@
+<%= content_for :title, "New Purchase Requisition - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Purchase Requisitions", purchase_requisitions_path, class: "breadcrumb-item" %>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">New</span>
+      </nav>
+      <h1>New Purchase Requisition</h1>
+    </div>
+  </div>
+
+  <%= render "form", purchase_requisition: @purchase_requisition %>
+</div>

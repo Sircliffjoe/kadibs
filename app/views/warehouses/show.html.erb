@@ -1,0 +1,360 @@
+<%= content_for :title, "#{@warehouse.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="wh-breadcrumb">
+  <%= link_to "Warehouses", warehouses_path, class: "wh-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="wh-breadcrumb-current"><%= @warehouse.name %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="wh-hero">
+  <div class="wh-hero-bg"></div>
+  <div class="wh-hero-content">
+    <div class="wh-hero-left">
+      <div class="wh-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 21V8l9-5 9 5v13"/>
+          <path d="M9 21V12h6v9"/>
+          <path d="M1 21h22"/>
+        </svg>
+      </div>
+      <div class="wh-hero-info">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <h1 class="wh-hero-title"><%= @warehouse.name %></h1>
+          <% if @warehouse.default_warehouse? %>
+            <span class="wh-default-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Default
+            </span>
+          <% end %>
+        </div>
+        <div class="wh-hero-meta">
+          <span class="wh-hero-code">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <%= @warehouse.code %>
+          </span>
+          <% if @warehouse.location %>
+            <span class="wh-hero-sep">•</span>
+            <span class="wh-hero-loc">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <%= @warehouse.location.name %>
+            </span>
+          <% end %>
+          <span class="wh-hero-sep">•</span>
+          <span class="wh-hero-count"><%= @inventory_items.count %> items in stock</span>
+        </div>
+        <% if @warehouse.description.present? %>
+          <p class="wh-hero-desc"><%= @warehouse.description %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="wh-hero-actions">
+      <%= link_to edit_warehouse_path(@warehouse), class: "wh-action-btn wh-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Warehouse
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="wh-layout">
+  <div class="wh-main">
+    <!-- Warehouse Information Card -->
+    <div class="wh-card">
+      <div class="wh-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Warehouse Information
+        </h3>
+      </div>
+      <div class="wh-card-body">
+        <div class="wh-detail-list">
+          <div class="wh-detail-row">
+            <span class="wh-detail-label">Code</span>
+            <span class="wh-detail-value wh-mono"><%= @warehouse.code %></span>
+          </div>
+          <div class="wh-detail-row">
+            <span class="wh-detail-label">Manager</span>
+            <span class="wh-detail-value">
+              <% if @warehouse.manager %>
+                <%= link_to @warehouse.manager.full_name, user_path(@warehouse.manager), class: "wh-link" %>
+              <% else %>
+                <span class="wh-muted">Unassigned</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="wh-detail-row">
+            <span class="wh-detail-label">Location</span>
+            <span class="wh-detail-value">
+              <% if @warehouse.location %>
+                <%= link_to @warehouse.location.name, location_path(@warehouse.location), class: "wh-link" %>
+                <span class="wh-detail-sub"><%= @warehouse.location.full_address %></span>
+              <% else %>
+                <span class="wh-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="wh-detail-row">
+            <span class="wh-detail-label">Items in Stock</span>
+            <span class="wh-detail-value"><strong><%= @inventory_items.count %></strong></span>
+          </div>
+          <div class="wh-detail-row">
+            <span class="wh-detail-label">Default Warehouse</span>
+            <span class="wh-detail-value"><%= @warehouse.default_warehouse? ? "Yes" : "No" %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Items Card -->
+    <div class="wh-card">
+      <div class="wh-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Inventory Items
+        </h3>
+        <% if @inventory_items.any? %>
+          <span class="wh-card-badge"><%= @inventory_items.count %> items</span>
+        <% end %>
+      </div>
+      <% if @inventory_items.any? %>
+        <div class="wh-table-wrap">
+          <table class="wh-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Stock Location</th>
+                <th>Qty On Hand</th>
+                <th>Min / Max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @inventory_items.limit(10).each do |item| %>
+                <tr>
+                  <td>
+                    <%= link_to item.part.name, part_path(item.part), class: "wh-link wh-bold" %>
+                    <span class="wh-part-num"><%= item.part.part_number %></span>
+                  </td>
+                  <td><%= item.stock_location&.name || "—" %></td>
+                  <td>
+                    <span class="wh-qty <%= 'wh-qty-low' if item.quantity_on_hand <= item.min_quantity %>"><%= item.quantity_on_hand %></span>
+                  </td>
+                  <td class="wh-muted"><%= item.min_quantity %> / <%= item.max_quantity %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <% if @inventory_items.count > 10 %>
+          <div class="wh-table-footer">
+            <%= link_to "View All Items →", parts_path(warehouse_id: @warehouse.id), class: "wh-link" %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="wh-card-body wh-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:36px;height:36px;color:#cbd5e1;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <p>No inventory in this warehouse</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="wh-sidebar">
+    <!-- Stock Locations Card -->
+    <div class="wh-card">
+      <div class="wh-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Stock Locations
+        </h3>
+        <% if @stock_locations.any? %>
+          <span class="wh-card-badge"><%= @stock_locations.count %></span>
+        <% end %>
+      </div>
+      <% if @stock_locations.any? %>
+        <div class="wh-card-body" style="padding: 0;">
+          <div class="wh-loc-list">
+            <% @stock_locations.each do |loc| %>
+              <div class="wh-loc-row">
+                <div class="wh-loc-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
+                <div class="wh-loc-info">
+                  <span class="wh-loc-name"><%= loc.name %></span>
+                  <span class="wh-loc-count"><%= loc.inventory_items.count %> items</span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="wh-card-body wh-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p>No stock locations defined</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── WH Breadcrumb ─── */
+  .wh-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .wh-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .wh-breadcrumb-link:hover { text-decoration: underline; }
+  .wh-breadcrumb-current { color: #64748b; }
+
+  /* ─── WH Hero Banner ─── */
+  .wh-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .wh-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .wh-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .wh-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .wh-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .wh-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .wh-hero-icon svg { width: 32px; height: 32px; }
+  .wh-hero-info { min-width: 0; flex: 1; }
+  .wh-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
+  .wh-default-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600;
+    background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);
+  }
+  .wh-hero-meta {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    margin-top: 0.5rem; font-size: 0.82rem; color: #94a3b8;
+  }
+  .wh-hero-sep { color: #475569; }
+  .wh-hero-code { display: inline-flex; align-items: center; gap: 0.25rem; color: #a5b4fc; font-family: ui-monospace, monospace; font-weight: 600; }
+  .wh-hero-loc, .wh-hero-count { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+  .wh-hero-desc { color: #94a3b8; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.5; }
+
+  /* ─── WH Action Buttons ─── */
+  .wh-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; }
+  .wh-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .wh-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .wh-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+  .wh-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .wh-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+
+  /* ─── Layout Grid ─── */
+  .wh-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .wh-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .wh-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .wh-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .wh-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .wh-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .wh-card-badge {
+    font-size: 0.75rem; font-weight: 500; color: #64748b;
+    background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 999px;
+  }
+  .wh-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .wh-detail-list { display: flex; flex-direction: column; }
+  .wh-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .wh-detail-row:last-child { border-bottom: none; }
+  .wh-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+  .wh-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .wh-detail-sub { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
+  .wh-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .wh-muted { color: #94a3b8; }
+  .wh-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .wh-link:hover { text-decoration: underline; }
+  .wh-bold { font-weight: 600; }
+
+  /* ─── Tables ─── */
+  .wh-table-wrap { overflow-x: auto; }
+  .wh-table { width: 100%; border-collapse: collapse; }
+  .wh-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .wh-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .wh-table tr:last-child td { border-bottom: none; }
+  .wh-table tr:hover { background: #f8fafc; }
+  .wh-part-num { display: block; font-size: 0.75rem; color: #94a3b8; font-family: ui-monospace, monospace; }
+  .wh-qty { font-weight: 600; color: #1e293b; }
+  .wh-qty-low { color: #ef4444; }
+  .wh-table-footer { padding: 0.75rem 1.25rem; border-top: 1px solid #f1f5f9; text-align: center; }
+
+  /* ─── Stock Locations ─── */
+  .wh-loc-list { display: flex; flex-direction: column; }
+  .wh-loc-row {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+  }
+  .wh-loc-row:last-child { border-bottom: none; }
+  .wh-loc-row:hover { background: #f8fafc; }
+  .wh-loc-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    color: #6366f1; flex-shrink: 0;
+  }
+  .wh-loc-info { display: flex; flex-direction: column; }
+  .wh-loc-name { font-size: 0.875rem; font-weight: 500; color: #1e293b; }
+  .wh-loc-count { font-size: 0.75rem; color: #94a3b8; }
+
+  /* ─── Empty States ─── */
+  .wh-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 2rem 1.25rem; text-align: center;
+  }
+  .wh-empty p { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .wh-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .wh-hero-left { flex-direction: column; align-items: flex-start; }
+    .wh-hero-actions { width: 100%; }
+    .wh-action-btn { flex: 1; justify-content: center; }
+    .wh-layout { grid-template-columns: 1fr; }
+  }
+</style>

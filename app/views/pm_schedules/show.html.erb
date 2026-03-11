@@ -1,0 +1,414 @@
+<%= content_for :title, "#{@pm_schedule.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="pm-breadcrumb">
+  <%= link_to "Preventive Maintenance", pm_schedules_path, class: "pm-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="pm-breadcrumb-current">Schedule</span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="pm-hero">
+  <div class="pm-hero-bg"></div>
+  <div class="pm-hero-content">
+    <div class="pm-hero-left">
+      <div class="pm-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <path d="M8 14l2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="pm-hero-info">
+        <h1 class="pm-hero-title"><%= @pm_schedule.name %></h1>
+        <div class="pm-hero-meta">
+          <% if @pm_schedule.schedule_type == 'meter_based' %>
+            <span class="pm-hero-freq">Every <%= @pm_schedule.meter_interval %> units</span>
+          <% else %>
+            <span class="pm-hero-freq">Every <%= @pm_schedule.frequency_value %> <%= @pm_schedule.frequency_unit %></span>
+          <% end %>
+          <% if @pm_schedule.asset.present? %>
+            <span class="pm-hero-sep">•</span>
+            <span class="pm-hero-asset">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+              <%= @pm_schedule.asset.name %>
+            </span>
+          <% end %>
+          <% if @pm_schedule.next_due_date.present? %>
+            <span class="pm-hero-sep">•</span>
+            <span class="pm-hero-due">
+              Next: <%= @pm_schedule.next_due_date.strftime("%b %d, %Y") %>
+            </span>
+          <% end %>
+        </div>
+        <div class="pm-hero-badges">
+          <span class="pm-pill pm-pill-<%= @pm_schedule.active? ? 'active' : 'inactive' %>">
+            <span class="pm-pill-dot"></span>
+            <%= @pm_schedule.active? ? 'Active' : 'Inactive' %>
+          </span>
+          <span class="pm-pill pm-pill-priority pm-pill-<%= @pm_schedule.priority %>">
+            <%= @pm_schedule.priority.titleize %>
+          </span>
+        </div>
+        <% if @pm_schedule.description.present? %>
+          <p class="pm-hero-desc"><%= @pm_schedule.description %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="pm-hero-actions">
+      <% if @pm_schedule.active? %>
+        <%= button_to "Generate Work Order", generate_work_order_pm_schedule_path(@pm_schedule), method: :post, class: "pm-action-btn pm-action-primary" %>
+        <%= button_to "Deactivate", deactivate_pm_schedule_path(@pm_schedule), method: :post, class: "pm-action-btn pm-action-danger" %>
+      <% else %>
+        <%= button_to "Activate", activate_pm_schedule_path(@pm_schedule), method: :post, class: "pm-action-btn pm-action-success" %>
+      <% end %>
+      <%= link_to "Edit Schedule", edit_pm_schedule_path(@pm_schedule), class: "pm-action-btn pm-action-ghost" %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="pm-layout">
+  <div class="pm-main">
+    <!-- Schedule Details Card -->
+    <div class="pm-card">
+      <div class="pm-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Schedule Details
+        </h3>
+      </div>
+      <div class="pm-card-body">
+        <div class="pm-detail-list">
+          <div class="pm-detail-row">
+            <span class="pm-detail-label">Asset</span>
+            <span class="pm-detail-value">
+              <% if @pm_schedule.asset %>
+                <%= link_to @pm_schedule.asset.name, @pm_schedule.asset, class: "pm-link" %>
+              <% else %>
+                <span class="pm-muted">None</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="pm-detail-row">
+            <span class="pm-detail-label">Frequency</span>
+            <span class="pm-detail-value">
+              <% if @pm_schedule.schedule_type == 'meter_based' %>
+                Every <%= @pm_schedule.meter_interval %> units
+              <% else %>
+                Every <%= @pm_schedule.frequency_value %> <%= @pm_schedule.frequency_unit %>
+              <% end %>
+            </span>
+          </div>
+          <div class="pm-detail-row">
+            <span class="pm-detail-label">Next Due</span>
+            <span class="pm-detail-value">
+              <% if @pm_schedule.next_due_date %>
+                <span class="<%= 'pm-overdue' if @pm_schedule.next_due_date < Date.current %>">
+                  <%= @pm_schedule.next_due_date.strftime("%B %d, %Y") %>
+                </span>
+                <span class="pm-detail-sub"><%= time_ago_in_words(@pm_schedule.next_due_date) %> <%= @pm_schedule.next_due_date < Date.current ? "overdue" : "from now" %></span>
+              <% else %>—<% end %>
+            </span>
+          </div>
+          <div class="pm-detail-row">
+            <span class="pm-detail-label">Priority</span>
+            <span class="pm-detail-value">
+              <span class="pm-badge pm-badge-<%= @pm_schedule.priority %>"><%= @pm_schedule.priority.titleize %></span>
+            </span>
+          </div>
+          <div class="pm-detail-row">
+            <span class="pm-detail-label">Assigned To</span>
+            <span class="pm-detail-value">
+              <% if @pm_schedule.default_assignee %>
+                <%= @pm_schedule.default_assignee.full_name %>
+              <% else %>
+                <span class="pm-muted">Unassigned</span>
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Occurrences Card -->
+    <div class="pm-card">
+      <div class="pm-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Recent Occurrences
+        </h3>
+      </div>
+      <% if @occurrences.any? %>
+        <div class="pm-table-wrap">
+          <table class="pm-table">
+            <thead>
+              <tr>
+                <th>Scheduled</th>
+                <th>Status</th>
+                <th>Work Order</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @occurrences.each do |occurrence| %>
+                <tr>
+                  <td><%= occurrence.scheduled_date.strftime("%b %d, %Y") %></td>
+                  <td>
+                    <span class="pm-status-pill pm-status-<%= occurrence.status %>"><%= occurrence.status.titleize %></span>
+                  </td>
+                  <td>
+                    <% if occurrence.work_order %>
+                      <%= link_to occurrence.work_order.number, occurrence.work_order, class: "pm-link" %>
+                    <% else %>
+                      <span class="pm-muted">—</span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="pm-card-body pm-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <p>No occurrences yet</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="pm-sidebar">
+    <!-- Performance Card -->
+    <div class="pm-card">
+      <div class="pm-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Performance
+        </h3>
+      </div>
+      <div class="pm-card-body">
+        <div class="pm-stats">
+          <div class="pm-stat">
+            <span class="pm-stat-value"><%= @pm_schedule.total_occurrences %></span>
+            <span class="pm-stat-label">Total Occurrences</span>
+          </div>
+          <div class="pm-stat">
+            <span class="pm-stat-value pm-stat-accent"><%= @pm_schedule.compliance_rate %>%</span>
+            <span class="pm-stat-label">Compliance Rate</span>
+          </div>
+          <div class="pm-stat">
+            <span class="pm-stat-value"><%= @pm_schedule.last_completed_date&.strftime("%b %d, %Y") || "Never" %></span>
+            <span class="pm-stat-label">Last Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Card -->
+    <div class="pm-card">
+      <div class="pm-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Work Order History
+        </h3>
+      </div>
+      <% if @generated_work_orders.any? %>
+        <div class="pm-table-wrap">
+          <table class="pm-table">
+            <thead>
+              <tr>
+                <th>WO #</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @generated_work_orders.each do |wo| %>
+                <tr>
+                  <td><%= link_to wo.number, wo, class: "pm-link" %></td>
+                  <td><%= wo.created_at.strftime("%b %d, %Y") %></td>
+                  <td><span class="pm-status-pill pm-status-<%= wo.status %>"><%= wo.status.titleize %></span></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="pm-card-body pm-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <p>No work orders generated yet</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── PM Breadcrumb ─── */
+  .pm-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .pm-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pm-breadcrumb-link:hover { text-decoration: underline; }
+  .pm-breadcrumb-current { color: #64748b; }
+
+  /* ─── PM Hero Banner ─── */
+  .pm-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .pm-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .pm-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .pm-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .pm-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .pm-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .pm-hero-icon svg { width: 32px; height: 32px; }
+  .pm-hero-info { min-width: 0; flex: 1; }
+  .pm-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0 0 0.35rem; letter-spacing: -0.02em; line-height: 1.2; }
+  .pm-hero-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; font-size: 0.82rem; color: #94a3b8; }
+  .pm-hero-freq { color: #cbd5e1; }
+  .pm-hero-sep { color: #475569; }
+  .pm-hero-asset, .pm-hero-due { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+  .pm-hero-desc { color: #94a3b8; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.5; }
+
+  /* ─── PM Badges ─── */
+  .pm-hero-badges { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .pm-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .pm-pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .pm-pill-active { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .pm-pill-active .pm-pill-dot { background: #4ade80; }
+  .pm-pill-inactive { background: rgba(148,163,184,0.15); color: #94a3b8; }
+  .pm-pill-inactive .pm-pill-dot { background: #94a3b8; }
+  .pm-pill-priority { background: rgba(148,163,184,0.12); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.2); }
+  .pm-pill-critical { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.25); }
+  .pm-pill-high { background: rgba(249,115,22,0.12); color: #fdba74; border-color: rgba(249,115,22,0.25); }
+  .pm-pill-medium { background: rgba(251,191,36,0.12); color: #fde68a; border-color: rgba(251,191,36,0.25); }
+  .pm-pill-low { background: rgba(34,197,94,0.12); color: #86efac; border-color: rgba(34,197,94,0.25); }
+
+  /* ─── PM Action Buttons ─── */
+  .pm-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; flex-wrap: wrap; }
+  .pm-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .pm-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .pm-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+  .pm-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .pm-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+  .pm-action-success { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .pm-action-success:hover { background: rgba(34,197,94,0.3); }
+  .pm-action-danger { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .pm-action-danger:hover { background: rgba(239,68,68,0.3); }
+
+  /* ─── Layout Grid ─── */
+  .pm-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .pm-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .pm-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .pm-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .pm-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .pm-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .pm-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .pm-detail-list { display: flex; flex-direction: column; }
+  .pm-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .pm-detail-row:last-child { border-bottom: none; }
+  .pm-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+  .pm-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .pm-detail-sub { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
+  .pm-overdue { color: #ef4444; font-weight: 600; }
+  .pm-muted { color: #94a3b8; }
+  .pm-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pm-link:hover { text-decoration: underline; }
+
+  /* ─── PM Badge ─── */
+  .pm-badge {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+  }
+  .pm-badge-critical { background: #fee2e2; color: #b91c1c; }
+  .pm-badge-high { background: #fef3c7; color: #b45309; }
+  .pm-badge-medium { background: #dbeafe; color: #1d4ed8; }
+  .pm-badge-low { background: #f1f5f9; color: #64748b; }
+
+  /* ─── Stats ─── */
+  .pm-stats { display: flex; flex-direction: column; gap: 1.25rem; }
+  .pm-stat { display: flex; flex-direction: column; gap: 0.15rem; }
+  .pm-stat-value { font-size: 1.5rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+  .pm-stat-accent { color: #6366f1; }
+  .pm-stat-label { font-size: 0.8rem; color: #94a3b8; font-weight: 500; }
+
+  /* ─── Tables ─── */
+  .pm-table-wrap { overflow-x: auto; }
+  .pm-table { width: 100%; border-collapse: collapse; }
+  .pm-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .pm-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .pm-table tr:last-child td { border-bottom: none; }
+  .pm-table tr:hover { background: #f8fafc; }
+
+  /* ─── Status Pills ─── */
+  .pm-status-pill {
+    display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+  }
+  .pm-status-completed { background: #dcfce7; color: #166534; }
+  .pm-status-scheduled { background: #dbeafe; color: #1d4ed8; }
+  .pm-status-open { background: #dbeafe; color: #1d4ed8; }
+  .pm-status-in_progress { background: #fef3c7; color: #b45309; }
+  .pm-status-closed { background: #f1f5f9; color: #475569; }
+
+  /* ─── Empty States ─── */
+  .pm-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 2rem 1.25rem; text-align: center;
+  }
+  .pm-empty p { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .pm-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .pm-hero-left { flex-direction: column; align-items: flex-start; }
+    .pm-hero-actions { width: 100%; }
+    .pm-action-btn { flex: 1; justify-content: center; }
+    .pm-layout { grid-template-columns: 1fr; }
+  }
+</style>

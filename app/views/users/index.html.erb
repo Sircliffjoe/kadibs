@@ -1,0 +1,115 @@
+<%= content_for :title, "Employees - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>Employees</h1>
+    <p class="page-subtitle">Manage team members and technicians</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to new_user_path, class: "btn btn-primary" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/>
+        <line x1="23" y1="11" x2="17" y2="11"/>
+      </svg>
+      Invite Employee
+    <% end %>
+  </div>
+</div>
+
+<div class="filters-bar">
+  <%= form_with url: users_path, method: :get, class: "filters-form" do |f| %>
+    <div class="filter-group">
+      <%= f.text_field :search, value: params[:search], placeholder: "Search employees...", class: "filter-input" %>
+    </div>
+    <div class="filter-group">
+      <%= f.collection_select :role, Role.order(:name), :id, :name, 
+          { include_blank: "All Roles" }, class: "filter-select" %>
+    </div>
+    <%= f.submit "Filter", class: "btn btn-outline" %>
+    <%= link_to "Clear", users_path, class: "btn btn-text" %>
+  <% end %>
+</div>
+
+<div class="data-table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @users.any? %>
+        <% @users.each do |user| %>
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-small"><%= user.first_name&.first %><%= user.last_name&.first %></div>
+                <%= link_to "#{user.first_name} #{user.last_name}", user, class: "table-link" %>
+              </div>
+            </td>
+            <td><%= user.email %></td>
+            <td>
+              <% user.roles.each do |role| %>
+                <span class="role-badge"><%= role.name.titleize %></span>
+              <% end %>
+            </td>
+            <td><%= user.department || '—' %></td>
+            <td>
+              <% if user.confirmed_at %>
+                <span class="status-badge status-active">Active</span>
+              <% else %>
+                <span class="status-badge status-pending">Pending</span>
+              <% end %>
+            </td>
+            <td>
+              <div class="table-actions">
+                <%= link_to user, class: "action-btn", title: "View" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <% end %>
+                <%= link_to edit_user_path(user), class: "action-btn", title: "Edit" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="6" class="empty-table">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+              </svg>
+              <p>No employees found</p>
+              <%= link_to "Invite your first employee", new_user_path, class: "btn btn-primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render "shared/table_styles" %>
+
+<style>
+  .role-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+  }
+  .status-active { background: #dcfce7; color: #166534; }
+  .status-pending { background: #fef3c7; color: #b45309; }
+</style>

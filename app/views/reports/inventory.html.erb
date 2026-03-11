@@ -1,0 +1,180 @@
+<%= content_for :title, "Inventory Valuation - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="rpt-breadcrumb">
+  <%= link_to "Reports", reports_dashboard_path, class: "rpt-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="rpt-breadcrumb-current">Inventory</span>
+</div>
+
+<!-- Header -->
+<div class="rpt-hero">
+  <div class="rpt-hero-bg"></div>
+  <div class="rpt-hero-content">
+    <div class="rpt-hero-left">
+      <div class="rpt-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="rpt-hero-title">Inventory & Financial</h1>
+        <p class="rpt-hero-sub"><%= @pagy.count %> parts • <%= number_to_currency(@total_value) %> total value</p>
+      </div>
+    </div>
+    <div>
+      <%= button_to reports_export_path(format: :csv, report: 'inventory'), method: :post, class: "rpt-action-btn" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="rpt-kpi-grid">
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value"><%= number_to_currency(@total_value, precision: 0) %></span>
+      <span class="rpt-kpi-label">Total Value</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#dcfce7;color:#16a34a;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#16a34a;"><%= @pagy.count - @low_stock_count - (@stock_outs || 0) %></span>
+      <span class="rpt-kpi-label">In Stock</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#fef3c7;color:#d97706;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#d97706;"><%= @low_stock_count %></span>
+      <span class="rpt-kpi-label">Low Stock</span>
+    </div>
+  </div>
+  <div class="rpt-kpi-card">
+    <div class="rpt-kpi-icon" style="background:#fee2e2;color:#dc2626;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    </div>
+    <div class="rpt-kpi-info">
+      <span class="rpt-kpi-value" style="color:#dc2626;"><%= @stock_outs || 0 %></span>
+      <span class="rpt-kpi-label">Stockouts</span>
+    </div>
+  </div>
+</div>
+
+<!-- Stock Health Chart -->
+<div class="rpt-charts-row">
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Stock Health</h3></div>
+    <div class="rpt-card-body" style="display:flex;justify-content:center;padding:1.5rem;">
+      <canvas id="stockHealthChart" style="max-height:280px;"></canvas>
+    </div>
+  </div>
+  <div class="rpt-card">
+    <div class="rpt-card-header"><h3>Top 10 by Inventory Value</h3></div>
+    <div class="rpt-card-body" style="padding:1.5rem;">
+      <canvas id="topPartsChart" style="max-height:280px;width:100%;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Inventory Table -->
+<div class="rpt-card" style="margin-top:1.5rem;">
+  <div class="rpt-card-header">
+    <h3>Inventory Data</h3>
+    <span class="rpt-badge"><%= @pagy.count %> parts</span>
+  </div>
+  <div class="rpt-table-wrap">
+    <table class="rpt-table">
+      <thead>
+        <tr>
+          <th>Part Name</th>
+          <th>Part Number</th>
+          <th>Qty On Hand</th>
+          <th>Avg Cost</th>
+          <th>Total Value</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @parts.any? %>
+          <% @parts.each do |part| %>
+            <tr>
+              <td><%= link_to part.name, part, class: "rpt-link" %></td>
+              <td class="rpt-mono"><%= part.part_number %></td>
+              <td><%= part.quantity_on_hand %></td>
+              <td><%= number_to_currency(part.average_cost) %></td>
+              <td><%= number_to_currency((part.quantity_on_hand || 0) * (part.average_cost || 0)) %></td>
+              <td>
+                <% if part.quantity_on_hand <= 0 %>
+                  <span class="rpt-pill" style="background:#fee2e2;color:#b91c1c;">Stockout</span>
+                <% elsif part.quantity_on_hand <= (part.reorder_level || 0) %>
+                  <span class="rpt-pill" style="background:#fef3c7;color:#b45309;">Low Stock</span>
+                <% else %>
+                  <span class="rpt-pill" style="background:#dcfce7;color:#166534;">In Stock</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr><td colspan="6" class="rpt-empty-cell">No inventory items found</td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <div style="margin-top:1rem;"><%== pagy_nav(@pagy) %></div>
+<% end %>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Stock Health Doughnut
+    var inStock = <%= @pagy.count - @low_stock_count - (@stock_outs || 0) %>;
+    var lowStock = <%= @low_stock_count %>;
+    var stockOuts = <%= @stock_outs || 0 %>;
+
+    new Chart(document.getElementById('stockHealthChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['In Stock', 'Low Stock', 'Stockout'],
+        datasets: [{ data: [inStock, lowStock, stockOuts], backgroundColor: ['#10b981', '#f59e0b', '#ef4444'], borderWidth: 0, hoverOffset: 8 }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyle: 'circle', font: { size: 12 } } } }, cutout: '65%' }
+    });
+
+    // Top 10 Parts by Value (Horizontal Bar)
+    <% top_parts = @parts.limit(nil).order(Arel.sql("(COALESCE(quantity_on_hand, 0) * COALESCE(average_cost, 0)) DESC")).limit(10) %>
+    var topNames = <%= raw top_parts.map(&:name).to_json %>;
+    var topValues = <%= raw top_parts.map { |p| (p.quantity_on_hand || 0) * (p.average_cost || 0) }.to_json %>;
+    var palette = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#818cf8','#4f46e5','#7c3aed','#5b21b6','#4338ca','#3730a3'];
+
+    new Chart(document.getElementById('topPartsChart'), {
+      type: 'bar',
+      data: { labels: topNames, datasets: [{ data: topValues, backgroundColor: palette, borderRadius: 6, borderSkipped: false, barThickness: 22 }] },
+      options: {
+        indexAxis: 'y', responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 11 }, callback: function(v) { return '$' + v.toLocaleString(); } } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  });
+</script>
+
+<%= render "shared/report_chart_styles" %>

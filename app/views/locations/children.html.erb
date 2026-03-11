@@ -1,0 +1,106 @@
+<%= content_for :title, "Sub-Locations - #{@location.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:1rem;font-size:0.85rem;">
+  <%= link_to "Locations", locations_path, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <%= link_to @location.name, @location, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span style="color:#64748b;">Sub-Locations</span>
+</div>
+
+<!-- Header -->
+<div class="lch-hero">
+  <div class="lch-hero-bg"></div>
+  <div class="lch-hero-content">
+    <div class="lch-hero-left">
+      <div class="lch-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="lch-hero-title">Sub-Locations</h1>
+        <p class="lch-hero-sub"><%= @location.name %> — <%= @children.count %> sub-locations</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.5rem;">
+      <%= link_to new_location_path(parent_id: @location.id), class: "lch-action-btn lch-action-primary" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Sub-Location
+      <% end %>
+      <%= link_to @location, class: "lch-action-btn lch-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="lch-card">
+  <% if @children.any? %>
+    <div class="lch-table-wrap">
+      <table class="lch-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Assets</th>
+            <th>Sub-Locations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @children.each do |child| %>
+            <tr>
+              <td><%= link_to child.name, child, class: "lch-link lch-bold" %></td>
+              <td><span class="lch-type-pill"><%= child.location_type&.titleize %></span></td>
+              <td><%= child.assets.count %></td>
+              <td><%= child.children.count %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="lch-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:40px;height:40px;color:#cbd5e1;">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+      </svg>
+      <p>No sub-locations found</p>
+      <%= link_to "Add Sub-Location", new_location_path(parent_id: @location.id), class: "lch-create-btn" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .lch-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .lch-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%); }
+  .lch-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+  .lch-hero-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem; gap: 2rem; }
+  .lch-hero-left { display: flex; align-items: center; gap: 1.25rem; }
+  .lch-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
+  .lch-hero-icon svg { width: 26px; height: 26px; }
+  .lch-hero-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0; }
+  .lch-hero-sub { font-size: 0.82rem; color: #94a3b8; margin: 0.2rem 0 0; }
+  .lch-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: all 0.2s; white-space: nowrap; border: none; cursor: pointer; }
+  .lch-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .lch-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+  .lch-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); }
+  .lch-action-ghost:hover { background: rgba(255,255,255,0.14); color: white; }
+  .lch-card { background: white; border-radius: 14px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .lch-table-wrap { overflow-x: auto; }
+  .lch-table { width: 100%; border-collapse: collapse; }
+  .lch-table th { padding: 0.75rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+  .lch-table td { padding: 0.75rem 1.25rem; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: #334155; }
+  .lch-table tr:last-child td { border-bottom: none; }
+  .lch-table tr:hover { background: #f8fafc; }
+  .lch-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .lch-link:hover { text-decoration: underline; }
+  .lch-bold { font-weight: 600; }
+  .lch-type-pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; background: #f1f5f9; color: #475569; }
+  .lch-empty { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 3rem 1.25rem; text-align: center; }
+  .lch-empty p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+  .lch-create-btn { display: inline-flex; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; background: #6366f1; color: white; text-decoration: none; transition: all 0.15s; }
+  .lch-create-btn:hover { background: #4f46e5; }
+</style>

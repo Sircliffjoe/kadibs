@@ -1,0 +1,372 @@
+<%= content_for :title, "#{@supplier.name} - Kadibs" %>
+
+<!-- Breadcrumb -->
+<div class="sup-breadcrumb">
+  <%= link_to "Suppliers", suppliers_path, class: "sup-breadcrumb-link" %>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="sup-breadcrumb-current"><%= @supplier.name %></span>
+</div>
+
+<!-- Premium Header Banner -->
+<div class="sup-hero">
+  <div class="sup-hero-bg"></div>
+  <div class="sup-hero-content">
+    <div class="sup-hero-left">
+      <div class="sup-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <path d="M20 8v6"/>
+          <path d="M23 11h-6"/>
+        </svg>
+      </div>
+      <div class="sup-hero-info">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <h1 class="sup-hero-title"><%= @supplier.name %></h1>
+          <div class="sup-hero-badges">
+            <span class="sup-pill sup-pill-<%= @supplier.active? ? 'active' : 'inactive' %>">
+              <span class="sup-pill-dot"></span>
+              <%= @supplier.active? ? 'Active' : 'Inactive' %>
+            </span>
+            <% if @supplier.preferred? %>
+              <span class="sup-pill sup-pill-preferred">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Preferred
+              </span>
+            <% end %>
+          </div>
+        </div>
+        <div class="sup-hero-meta">
+          <% if @supplier.code.present? %>
+            <span class="sup-hero-code">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <%= @supplier.code %>
+            </span>
+          <% end %>
+          <% if @supplier.email.present? %>
+            <span class="sup-hero-sep">•</span>
+            <span class="sup-hero-email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <%= @supplier.email %>
+            </span>
+          <% end %>
+          <% if @supplier.phone.present? %>
+            <span class="sup-hero-sep">•</span>
+            <span class="sup-hero-phone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <%= @supplier.phone %>
+            </span>
+          <% end %>
+        </div>
+        <% if @supplier.notes.present? %>
+          <p class="sup-hero-desc"><%= @supplier.notes.truncate(120) %></p>
+        <% end %>
+      </div>
+    </div>
+    <div class="sup-hero-actions">
+      <%= link_to edit_supplier_path(@supplier), class: "sup-action-btn sup-action-ghost" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Vendor
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Body Content -->
+<div class="sup-layout">
+  <div class="sup-main">
+    <!-- Vendor Information Card -->
+    <div class="sup-card">
+      <div class="sup-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Vendor Information
+        </h3>
+      </div>
+      <div class="sup-card-body">
+        <div class="sup-detail-list">
+          <div class="sup-detail-row">
+            <span class="sup-detail-label">Contact Person</span>
+            <span class="sup-detail-value">
+              <% if @supplier.contact_name.present? %>
+                <%= @supplier.contact_name %>
+                <% if @supplier.contact_title.present? %>
+                  <span class="sup-detail-sub"><%= @supplier.contact_title %></span>
+                <% end %>
+              <% else %>
+                <span class="sup-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="sup-detail-row">
+            <span class="sup-detail-label">Email</span>
+            <span class="sup-detail-value">
+              <% if @supplier.email.present? %>
+                <%= mail_to @supplier.email, class: "sup-link" %>
+              <% else %>
+                <span class="sup-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="sup-detail-row">
+            <span class="sup-detail-label">Phone</span>
+            <span class="sup-detail-value">
+              <% if @supplier.phone.present? %>
+                <%= link_to @supplier.phone, "tel:#{@supplier.phone}", class: "sup-link" %>
+              <% else %>
+                <span class="sup-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="sup-detail-row">
+            <span class="sup-detail-label">Website</span>
+            <span class="sup-detail-value">
+              <% if @supplier.website.present? %>
+                <%= link_to @supplier.website.gsub(/https?:\/\//, ''), @supplier.website, target: "_blank", class: "sup-link" %>
+              <% else %>
+                <span class="sup-muted">—</span>
+              <% end %>
+            </span>
+          </div>
+          <div class="sup-detail-row">
+            <span class="sup-detail-label">Code</span>
+            <span class="sup-detail-value sup-mono"><%= @supplier.code.presence || "—" %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supplied Parts Card -->
+    <div class="sup-card">
+      <div class="sup-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Supplied Parts
+        </h3>
+        <% if @parts.any? %>
+          <%= link_to "View All →", parts_path(supplier_id: @supplier.id), class: "sup-header-link" %>
+        <% end %>
+      </div>
+      <% if @parts.any? %>
+        <div class="sup-table-wrap">
+          <table class="sup-table">
+            <thead>
+              <tr>
+                <th>Part Name</th>
+                <th>Part Number</th>
+                <th style="text-align:right;">Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @parts.each do |part| %>
+                <tr>
+                  <td><%= link_to part.name, part, class: "sup-link sup-bold" %></td>
+                  <td><span class="sup-mono"><%= part.part_number %></span></td>
+                  <td style="text-align:right;font-weight:600;"><%= number_to_currency(part.unit_cost) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="sup-card-body sup-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <p>No parts assigned to this vendor</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sup-sidebar">
+    <!-- Address Card -->
+    <div class="sup-card">
+      <div class="sup-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Address
+        </h3>
+      </div>
+      <div class="sup-card-body">
+        <% if @supplier.full_address.present? %>
+          <p class="sup-address">
+            <%= @supplier.street %><br>
+            <% if @supplier.city.present? || @supplier.state.present? || @supplier.postal_code.present? %>
+              <%= [@supplier.city, @supplier.state, @supplier.postal_code].compact.join(", ") %><br>
+            <% end %>
+            <%= @supplier.country %>
+          </p>
+          <a href="https://www.google.com/maps/search/?api=1&query=<%= URI.encode_www_form_component(@supplier.full_address) %>" target="_blank" class="sup-map-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            View on Map
+          </a>
+        <% else %>
+          <div class="sup-empty" style="padding:1rem 0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:28px;height:28px;color:#cbd5e1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <p>No address provided</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Purchase History Card -->
+    <div class="sup-card">
+      <div class="sup-card-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Recent Purchase Orders
+        </h3>
+      </div>
+      <div class="sup-card-body sup-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:32px;height:32px;color:#cbd5e1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>No recent purchase history</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render "shared/detail_styles" %>
+
+<style>
+  /* ─── SUP Breadcrumb ─── */
+  .sup-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .sup-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .sup-breadcrumb-link:hover { text-decoration: underline; }
+  .sup-breadcrumb-current { color: #64748b; }
+
+  /* ─── SUP Hero Banner ─── */
+  .sup-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .sup-hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+  }
+  .sup-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(139,92,246,0.10) 0%, transparent 60%);
+  }
+  .sup-hero-content {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 2.25rem; gap: 2rem;
+  }
+  .sup-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
+  .sup-hero-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
+  }
+  .sup-hero-icon svg { width: 32px; height: 32px; }
+  .sup-hero-info { min-width: 0; flex: 1; }
+  .sup-hero-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin: 0; letter-spacing: -0.02em; line-height: 1.2; }
+  .sup-hero-badges { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .sup-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .sup-pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .sup-pill-active { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .sup-pill-active .sup-pill-dot { background: #4ade80; }
+  .sup-pill-inactive { background: rgba(148,163,184,0.15); color: #94a3b8; }
+  .sup-pill-inactive .sup-pill-dot { background: #94a3b8; }
+  .sup-pill-preferred { background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+  .sup-hero-meta {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    margin-top: 0.5rem; font-size: 0.82rem; color: #94a3b8;
+  }
+  .sup-hero-sep { color: #475569; }
+  .sup-hero-code { display: inline-flex; align-items: center; gap: 0.25rem; color: #a5b4fc; font-family: ui-monospace, monospace; font-weight: 600; }
+  .sup-hero-email, .sup-hero-phone { display: inline-flex; align-items: center; gap: 0.25rem; color: #cbd5e1; }
+  .sup-hero-desc { color: #94a3b8; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.5; }
+
+  /* ─── SUP Action Buttons ─── */
+  .sup-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; }
+  .sup-action-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
+  }
+  .sup-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
+  .sup-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
+
+  /* ─── Layout Grid ─── */
+  .sup-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .sup-main { display: flex; flex-direction: column; gap: 1.5rem; }
+  .sup-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .sup-card {
+    background: white; border-radius: 14px; border: 1px solid #e2e8f0;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .sup-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+  }
+  .sup-card-header h3 {
+    font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .sup-header-link { font-size: 0.8rem; color: #6366f1; text-decoration: none; font-weight: 500; }
+  .sup-header-link:hover { text-decoration: underline; }
+  .sup-card-body { padding: 1.25rem; }
+
+  /* ─── Detail List ─── */
+  .sup-detail-list { display: flex; flex-direction: column; }
+  .sup-detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .sup-detail-row:last-child { border-bottom: none; }
+  .sup-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+  .sup-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
+  .sup-detail-sub { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.1rem; }
+  .sup-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .sup-muted { color: #94a3b8; }
+  .sup-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .sup-link:hover { text-decoration: underline; }
+  .sup-bold { font-weight: 600; }
+
+  /* ─── Tables ─── */
+  .sup-table-wrap { overflow-x: auto; }
+  .sup-table { width: 100%; border-collapse: collapse; }
+  .sup-table th {
+    padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+  }
+  .sup-table td {
+    padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem; color: #334155;
+  }
+  .sup-table tr:last-child td { border-bottom: none; }
+  .sup-table tr:hover { background: #f8fafc; }
+
+  /* ─── Address ─── */
+  .sup-address { color: #334155; line-height: 1.7; font-size: 0.9rem; margin: 0 0 1rem; }
+  .sup-map-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500;
+    background: #f1f5f9; color: #475569; text-decoration: none; transition: all 0.15s;
+    border: 1px solid #e2e8f0;
+  }
+  .sup-map-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+  /* ─── Empty States ─── */
+  .sup-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 2rem 1.25rem; text-align: center;
+  }
+  .sup-empty p { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .sup-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .sup-hero-left { flex-direction: column; align-items: flex-start; }
+    .sup-hero-actions { width: 100%; }
+    .sup-action-btn { flex: 1; justify-content: center; }
+    .sup-layout { grid-template-columns: 1fr; }
+  }
+</style>

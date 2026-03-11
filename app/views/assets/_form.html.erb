@@ -1,0 +1,135 @@
+<%= form_with model: asset, class: "resource-form" do |f| %>
+  <% if asset.errors.any? %>
+    <div class="form-errors">
+      <h4><%= pluralize(asset.errors.count, "error") %> prevented this asset from being saved:</h4>
+      <ul>
+        <% asset.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Basic Information</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :name, class: "form-label" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "Equipment name" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :code, class: "form-label" %>
+        <%= f.text_field :code, class: "form-input", placeholder: "Auto-generated if blank" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full">
+        <%= f.label :description, class: "form-label" %>
+        <%= f.text_area :description, class: "form-input", rows: 3, placeholder: "Equipment description..." %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :asset_category_id, "Category", class: "form-label" %>
+        <%= f.collection_select :asset_category_id, AssetCategory.order(:name), :id, :name, 
+            { include_blank: "Select category..." }, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :location_id, "Location", class: "form-label" %>
+        <%= f.collection_select :location_id, Location.order(:name), :id, :name, 
+            { include_blank: "Select location..." }, class: "form-select" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :status, class: "form-label" %>
+        <%= f.select :status, options_for_select([
+          ["Operational", "operational"],
+          ["Under Maintenance", "under_maintenance"],
+          ["Out of Service", "out_of_service"],
+          ["Retired", "retired"]
+        ], asset.status || "operational"), {}, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :criticality, class: "form-label" %>
+        <%= f.select :criticality, options_for_select([
+          ["Low", "low"],
+          ["Medium", "medium"],
+          ["High", "high"],
+          ["Critical", "critical"]
+        ], asset.criticality || "medium"), {}, class: "form-select" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Manufacturer Details</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :manufacturer, class: "form-label" %>
+        <%= f.text_field :manufacturer, class: "form-input", placeholder: "Manufacturer name" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :model, class: "form-label" %>
+        <%= f.text_field :model, class: "form-input", placeholder: "Model number" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :serial_number, class: "form-label" %>
+        <%= f.text_field :serial_number, class: "form-input", placeholder: "Serial number" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Financial Information</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :purchase_date, class: "form-label" %>
+        <%= f.date_field :purchase_date, class: "form-input" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :purchase_price, class: "form-label" %>
+        <%= f.number_field :purchase_price, class: "form-input", step: 0.01, min: 0 %>
+      </div>
+      <div class="form-group">
+        <%= f.label :warranty_end_date, class: "form-label" %>
+        <%= f.date_field :warranty_end_date, class: "form-input" %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :useful_life_years, "Expected Life (years)", class: "form-label" %>
+        <%= f.number_field :useful_life_years, class: "form-input", min: 0 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3 class="form-section-title">Identification</h3>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :barcode, class: "form-label" %>
+        <%= f.text_field :barcode, class: "form-input", placeholder: "Barcode" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :qr_code_data, "QR Code Data", class: "form-label" %>
+        <%= f.text_field :qr_code_data, class: "form-input", placeholder: "QR Code Data" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to "Cancel", assets_path, class: "btn btn-outline" %>
+    <%= f.submit asset.persisted? ? "Update Equipment" : "Add Equipment", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= render "shared/form_styles" %>

@@ -1,0 +1,86 @@
+<%= content_for :title, "Locations - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <h1>Locations</h1>
+    <p class="page-subtitle">Manage your facilities and locations</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to new_location_path, class: "btn btn-primary" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add Location
+    <% end %>
+  </div>
+</div>
+
+<div class="filters-bar">
+  <%= form_with url: locations_path, method: :get, class: "filters-form" do |f| %>
+    <div class="filter-group">
+      <%= f.text_field :search, value: params[:search], placeholder: "Search locations...", class: "filter-input" %>
+    </div>
+    <%= f.submit "Search", class: "btn btn-outline" %>
+    <%= link_to "Clear", locations_path, class: "btn btn-text" %>
+  <% end %>
+</div>
+
+<div class="data-table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Address</th>
+        <th>Parent Location</th>
+        <th>Assets</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @locations.any? %>
+        <% @locations.each do |location| %>
+          <tr>
+            <td>
+              <%= link_to location.name, location, class: "table-link" %>
+            </td>
+            <td><span class="type-badge"><%= location.location_type&.titleize %></span></td>
+            <td><%= location.address.present? ? "#{location.address}, #{location.city}" : '—' %></td>
+            <td>
+              <% if location.parent %>
+                <%= link_to location.parent.name, location.parent, class: "secondary-link" %>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td><%= location.assets.count %></td>
+            <td>
+              <div class="table-actions">
+                <%= link_to location, class: "action-btn", title: "View" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <% end %>
+                <%= link_to edit_location_path(location), class: "action-btn", title: "Edit" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="6" class="empty-table">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="empty-icon">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              <p>No locations found</p>
+              <%= link_to "Add your first location", new_location_path, class: "btn btn-primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render "shared/table_styles" %>

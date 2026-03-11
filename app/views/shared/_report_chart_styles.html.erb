@@ -1,0 +1,77 @@
+<style>
+  /* ─── RPT Breadcrumb ─── */
+  .rpt-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .rpt-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .rpt-breadcrumb-link:hover { text-decoration: underline; }
+  .rpt-breadcrumb-current { color: #64748b; }
+
+  /* ─── RPT Hero Banner ─── */
+  .rpt-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+  .rpt-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%); }
+  .rpt-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+  .rpt-hero-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem; gap: 2rem; }
+  .rpt-hero-left { display: flex; align-items: center; gap: 1.25rem; }
+  .rpt-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
+  .rpt-hero-icon svg { width: 26px; height: 26px; }
+  .rpt-hero-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0; }
+  .rpt-hero-sub { font-size: 0.82rem; color: #94a3b8; margin: 0.2rem 0 0; }
+  .rpt-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; text-decoration: none; color: #e2e8f0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s; cursor: pointer; }
+  .rpt-action-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+
+  /* ─── KPI Cards ─── */
+  .rpt-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .rpt-kpi-card { background: white; border-radius: 14px; border: 1px solid #e2e8f0; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .rpt-kpi-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .rpt-kpi-info { display: flex; flex-direction: column; }
+  .rpt-kpi-value { font-size: 1.75rem; font-weight: 700; color: #1e293b; line-height: 1.1; }
+  .rpt-kpi-label { font-size: 0.75rem; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 0.15rem; }
+
+  /* ─── Charts Row ─── */
+  .rpt-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+  /* ─── Cards ─── */
+  .rpt-card { background: white; border-radius: 14px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .rpt-card-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; }
+  .rpt-card-header h3 { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0; }
+  .rpt-card-body { padding: 1.25rem; }
+  .rpt-badge { display: inline-flex; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; background: #f1f5f9; color: #475569; }
+
+  /* ─── Tables ─── */
+  .rpt-table-wrap { overflow-x: auto; }
+  .rpt-table { width: 100%; border-collapse: collapse; }
+  .rpt-table th { padding: 0.7rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+  .rpt-table td { padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: #334155; }
+  .rpt-table tr:last-child td { border-bottom: none; }
+  .rpt-table tr:hover { background: #f8fafc; }
+  .rpt-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .rpt-link:hover { text-decoration: underline; }
+  .rpt-mono { font-family: ui-monospace, monospace; font-weight: 600; }
+  .rpt-muted { color: #94a3b8; }
+  .rpt-empty-cell { text-align: center; color: #94a3b8; padding: 2rem !important; }
+
+  /* ─── Pills ─── */
+  .rpt-pill { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+  .rpt-p-critical { background: #7f1d1d; color: #fca5a5; }
+  .rpt-p-high { background: #fee2e2; color: #b91c1c; }
+  .rpt-p-medium { background: #fef3c7; color: #b45309; }
+  .rpt-p-low { background: #dcfce7; color: #166534; }
+  .rpt-s-open { background: #dbeafe; color: #1d4ed8; }
+  .rpt-s-in-progress { background: #fef3c7; color: #b45309; }
+  .rpt-s-completed { background: #dcfce7; color: #166534; }
+  .rpt-s-on-hold { background: #f1f5f9; color: #475569; }
+  .rpt-s-cancelled { background: #fee2e2; color: #b91c1c; }
+  .rpt-s-pending { background: #ede9fe; color: #6d28d9; }
+
+  /* ─── Status badges (for asset statuses) ─── */
+  .rpt-st-operational { background: #dcfce7; color: #166534; }
+  .rpt-st-under-maintenance, .rpt-st-under-repair { background: #fef3c7; color: #b45309; }
+  .rpt-st-out-of-service { background: #fee2e2; color: #b91c1c; }
+  .rpt-st-retired, .rpt-st-decommissioned { background: #f1f5f9; color: #475569; }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .rpt-hero-content { flex-direction: column; align-items: flex-start; padding: 1.5rem; }
+    .rpt-charts-row { grid-template-columns: 1fr; }
+    .rpt-kpi-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
