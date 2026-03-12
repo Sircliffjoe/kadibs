@@ -10,17 +10,17 @@ class ApplicationPolicy
     @record = record
   end
 
-  # Default: deny all actions
+  # Default: deny all actions (super_admin bypasses all policies)
   def index?
-    false
+    super_admin?
   end
 
   def show?
-    false
+    super_admin?
   end
 
   def create?
-    false
+    super_admin?
   end
 
   def new?
@@ -28,7 +28,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    super_admin?
   end
 
   def edit?
@@ -36,7 +36,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    super_admin?
   end
 
   # ==========================================================================
