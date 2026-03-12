@@ -1,0 +1,15 @@
+{
+  "name": "kadibs",
+  "description": "KADIBS ENGINEERING SERVICES LIMITED management platform",
+  "scripts": {
+    "dokku": {
+      "predeploy": "bundle exec rails db:migrate",
+      "postdeploy": "bundle exec rails db:seed"
+    }
+  },
+  "env": {
+    "RAILS_ENV": {
+      "value": "production"
+    }
+  }
+}
