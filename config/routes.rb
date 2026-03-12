@@ -2,6 +2,15 @@
 
 Rails.application.routes.draw do
   # ===========================================================================
+  # WWW Redirect → kadibs.com (non-www canonical)
+  # ===========================================================================
+  constraints host: /^www\./ do
+    get "(*path)", to: redirect { |params, req|
+      "https://kadibs.com/#{params[:path]}#{req.query_string.present? ? "?#{req.query_string}" : ""}"
+    }
+  end
+
+  # ===========================================================================
   # Devise Authentication
   # ===========================================================================
   devise_for :users, controllers: {
