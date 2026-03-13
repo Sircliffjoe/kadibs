@@ -12,7 +12,7 @@ class LocationPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def new?
@@ -20,7 +20,7 @@ class LocationPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def edit?
@@ -28,7 +28,7 @@ class LocationPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_role?(:org_admin)
+    super_admin? || user.has_role?(:org_admin)
   end
 
   def children?
@@ -41,7 +41,11 @@ class LocationPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      scope.all
+      if super_admin?
+        scope.all
+      else
+        scope.all # Currently all users see all locations, but adding consistency
+      end
     end
   end
 end

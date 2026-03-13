@@ -12,7 +12,7 @@ class PurchaseRequisitionPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :technician)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :technician)
   end
 
   def new?
@@ -21,7 +21,7 @@ class PurchaseRequisitionPolicy < ApplicationPolicy
 
   def update?
     return false unless record.status.in?(%w[draft pending])
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper) || record.created_by == user
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper) || record.created_by == user
   end
 
   def edit?
@@ -30,37 +30,37 @@ class PurchaseRequisitionPolicy < ApplicationPolicy
 
   def destroy?
     return false unless record.status == "draft"
-    user.has_role?(:org_admin) || record.created_by == user
+    super_admin? || user.has_role?(:org_admin) || record.created_by == user
   end
 
   def submit?
     return false unless record.status == "draft"
-    record.created_by == user || user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || record.created_by == user || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def approve?
     return false unless record.status == "pending"
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def reject?
     return false unless record.status == "pending"
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def mark_ordered?
     return false unless record.status == "approved"
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
   end
 
   def receive?
     return false unless record.status == "ordered"
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
   end
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :auditor)
+      if super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :auditor)
         scope.all
       else
         scope.where(created_by: user)

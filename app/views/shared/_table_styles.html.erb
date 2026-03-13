@@ -47,13 +47,13 @@
   }
   
   .btn-primary {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--primary-gradient);
     color: white;
   }
   
   .btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.4);
   }
   
   .btn-outline {
@@ -63,8 +63,8 @@
   }
   
   .btn-outline:hover {
-    border-color: #6366f1;
-    color: #6366f1;
+    border-color: var(--primary);
+    color: var(--primary);
   }
   
   .btn-text {
@@ -140,7 +140,7 @@
   
   .filter-input:focus, .filter-select:focus {
     outline: none;
-    border-color: #6366f1;
+    border-color: var(--primary);
     background: white;
   }
 
@@ -164,9 +164,9 @@
   }
 
   .filter-chip.active {
-    background: #e0e7ff;
-    color: #4338ca;
-    border-color: #c7d2fe;
+    background: rgba(29, 53, 87, 0.1);
+    color: var(--primary);
+    border-color: rgba(29, 53, 87, 0.2);
     font-weight: 600;
   }
 
@@ -199,7 +199,7 @@
   .stat-pill-value {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #6366f1;
+    color: var(--primary);
   }
   
   .stat-pill-label {
@@ -257,7 +257,7 @@
   }
   
   .table-link:hover {
-    color: #6366f1;
+    color: var(--primary);
   }
   
   .secondary-link {
@@ -267,7 +267,7 @@
   }
   
   .secondary-link:hover {
-    color: #6366f1;
+    color: var(--primary);
   }
 
   /* Status & Priority Badges */
@@ -283,7 +283,7 @@
   
   .status-badge { background: #f1f5f9; color: #64748b; }
   .status-open { background: #dbeafe; color: #1d4ed8; }
-  .status-assigned { background: #e0e7ff; color: #4338ca; }
+  .status-assigned { background: rgba(29, 53, 87, 0.1); color: var(--primary); }
   .status-in_progress { background: #fef3c7; color: #b45309; }
   .status-on_hold { background: #fee2e2; color: #b91c1c; }
   .status-completed { background: #dcfce7; color: #166534; }
@@ -295,8 +295,8 @@
   .priority-critical { background: #fee2e2; color: #b91c1c; }
   
   .type-badge {
-    background: #e0e7ff;
-    color: #4338ca;
+    background: rgba(29, 53, 87, 0.1);
+    color: var(--primary);
     margin-left: 0.5rem;
   }
 
@@ -311,7 +311,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--primary-gradient);
     color: white;
     font-size: 0.65rem;
     font-weight: 600;
@@ -339,7 +339,7 @@
   
   .action-btn:hover {
     background: #f1f5f9;
-    color: #6366f1;
+    color: var(--primary);
   }
   
   .action-btn svg {
@@ -385,5 +385,5 @@
   .pagination a, .pagination span { padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.875rem; }
   .pagination a { color: #64748b; text-decoration: none; }
   .pagination a:hover { background: #f1f5f9; }
-  .pagination .active a { background: #6366f1; color: white; }
+  .pagination .active a { background: var(--primary); color: white; }
 </style>

@@ -12,7 +12,7 @@ class WarehousePolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
   end
 
   def new?
@@ -20,7 +20,7 @@ class WarehousePolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper)
   end
 
   def edit?
@@ -28,7 +28,7 @@ class WarehousePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_role?(:org_admin)
+    super_admin? || user.has_role?(:org_admin)
   end
 
   class Scope < ApplicationPolicy::Scope

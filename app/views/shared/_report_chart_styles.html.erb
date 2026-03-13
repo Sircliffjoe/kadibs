@@ -1,17 +1,22 @@
 <style>
+  :root {
+    --primary: #1d3557; /* Navy Blue */
+    --primary-dark: #1d3557; /* Darker Navy Blue */
+  }
+
   /* ─── RPT Breadcrumb ─── */
   .rpt-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .rpt-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .rpt-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .rpt-breadcrumb-link:hover { text-decoration: underline; }
   .rpt-breadcrumb-current { color: #64748b; }
 
   /* ─── RPT Hero Banner ─── */
   .rpt-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
-  .rpt-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%); }
-  .rpt-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+  .rpt-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, var(--primary-dark) 100%); }
+  .rpt-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(29,53,87,0.15) 0%, transparent 60%); }
   .rpt-hero-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem; gap: 2rem; }
   .rpt-hero-left { display: flex; align-items: center; gap: 1.25rem; }
-  .rpt-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
+  .rpt-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(29,53,87,0.25), rgba(69,123,157,0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
   .rpt-hero-icon svg { width: 26px; height: 26px; }
   .rpt-hero-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0; }
   .rpt-hero-sub { font-size: 0.82rem; color: #94a3b8; margin: 0.2rem 0 0; }
@@ -43,7 +48,7 @@
   .rpt-table td { padding: 0.65rem 1.25rem; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: #334155; }
   .rpt-table tr:last-child td { border-bottom: none; }
   .rpt-table tr:hover { background: #f8fafc; }
-  .rpt-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .rpt-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .rpt-link:hover { text-decoration: underline; }
   .rpt-mono { font-family: ui-monospace, monospace; font-weight: 600; }
   .rpt-muted { color: #94a3b8; }

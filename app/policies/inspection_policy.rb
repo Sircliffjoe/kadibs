@@ -10,15 +10,15 @@ class InspectionPolicy < ApplicationPolicy
   end
 
   def create?
-    user.admin? || user.manager? || user.technician?
+    super_admin? || user.admin? || user.manager? || user.technician?
   end
 
   def update?
-    user.admin? || user.manager? || (user.technician? && record.inspector_id == user.id)
+    super_admin? || user.admin? || user.manager? || (user.technician? && record.inspector_id == user.id)
   end
 
   def destroy?
-    user.admin? || user.manager?
+    super_admin? || user.admin? || user.manager?
   end
 
   def start?

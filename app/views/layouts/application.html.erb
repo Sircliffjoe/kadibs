@@ -11,8 +11,7 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,10 +25,13 @@
         --sidebar-width: 260px;
         --sidebar-collapsed-width: 72px;
         --header-height: 60px;
-        --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
-        --sidebar-bg: #0f172a;
-        --sidebar-hover: #1e293b;
-        --sidebar-active: #312e81;
+        --primary: #1D3557;
+        --primary-light: #457B9D;
+        --primary-dark: #0F1D33;
+        --primary-gradient: linear-gradient(135deg, #1D3557, #457B9D);
+        --sidebar-bg: #0F1D33;
+        --sidebar-hover: #1D3557;
+        --sidebar-active: #457B9D;
         --text-primary: #f8fafc;
         --text-muted: #94a3b8;
         --border-color: #e2e8f0;
@@ -218,173 +220,6 @@
         margin-left: var(--sidebar-collapsed-width);
       }
 
-      /* Top Header */
-      .top-header {
-        height: var(--header-height);
-        background: white;
-        border-bottom: 1px solid var(--border-color);
-        display: flex;
-        align-items: center;
-        padding: 0 1.5rem;
-        gap: 1rem;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-      }
-
-      .header-search {
-        flex: 1;
-        max-width: 400px;
-        position: relative;
-      }
-
-      .header-search input {
-        width: 100%;
-        padding: 0.5rem 1rem 0.5rem 2.5rem;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        font-size: 0.9rem;
-        background: #f8fafc;
-      }
-
-      .header-search input:focus {
-        outline: none;
-        border-color: #6366f1;
-        background: white;
-      }
-
-      .header-search svg {
-        position: absolute;
-        left: 0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        color: #94a3b8;
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-left: auto;
-      }
-
-      .trial-badge {
-        padding: 0.4rem 0.75rem;
-        background: #fef3c7;
-        color: #b45309;
-        border-radius: 6px;
-        font-size: 0.8rem;
-        font-weight: 500;
-      }
-
-      .header-btn {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.15s;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .header-btn-primary {
-        background: var(--primary-gradient);
-        color: white;
-        border: none;
-      }
-
-      .header-btn-outline {
-        background: transparent;
-        border: 1px solid var(--border-color);
-        color: #475569;
-      }
-
-      .header-btn-outline:hover {
-        border-color: #6366f1;
-        color: #6366f1;
-      }
-
-      .header-icon-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        border: none;
-        background: transparent;
-        color: #64748b;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-      }
-
-      .header-icon-btn:hover {
-        background: #f1f5f9;
-        color: #1e293b;
-      }
-
-      .header-icon-btn svg {
-        width: 20px;
-        height: 20px;
-      }
-
-      .notification-dot {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 8px;
-        height: 8px;
-        background: #ef4444;
-        border-radius: 50%;
-      }
-
-      .user-menu {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.25rem;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-
-      .user-menu:hover {
-        background: #f1f5f9;
-      }
-
-      .user-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: var(--primary-gradient);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 0.85rem;
-        font-weight: 600;
-      }
-
-      .user-info {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .user-name {
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #1e293b;
-      }
-
-      .user-org {
-        font-size: 0.7rem;
-        color: #64748b;
-      }
-
       /* Main Content */
       .main-content {
         flex: 1;
@@ -434,9 +269,25 @@
       }
 
       /* Responsive */
+      .mobile-close-btn {
+        display: none;
+        margin-left: auto;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 0.5rem;
+      }
+
+      .mobile-close-btn svg {
+        width: 24px;
+        height: 24px;
+      }
+
       @media (max-width: 1024px) {
         .sidebar {
           transform: translateX(-100%);
+          width: var(--sidebar-width) !important;
         }
 
         .sidebar.open {
@@ -444,11 +295,15 @@
         }
 
         .main-wrapper {
-          margin-left: 0;
+          margin-left: 0 !important;
         }
 
         .mobile-menu-btn {
           display: flex;
+        }
+
+        .mobile-close-btn {
+          display: block;
         }
       }
 

@@ -12,7 +12,7 @@ class PreventiveMaintenanceSchedulePolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def new?
@@ -20,7 +20,7 @@ class PreventiveMaintenanceSchedulePolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def edit?
@@ -28,7 +28,7 @@ class PreventiveMaintenanceSchedulePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_role?(:org_admin)
+    super_admin? || user.has_role?(:org_admin)
   end
 
   def calendar?
@@ -40,15 +40,15 @@ class PreventiveMaintenanceSchedulePolicy < ApplicationPolicy
   end
 
   def generate_work_order?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def activate?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def deactivate?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   class Scope < ApplicationPolicy::Scope

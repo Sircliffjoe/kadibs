@@ -6,7 +6,7 @@ class WorkOrderCommentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record.user == user || user.has_role?(:admin) || user.has_role?(:manager)
+    super_admin? || record.user == user || user.has_role?(:admin) || user.has_role?(:manager)
   end
 
   class Scope < ApplicationPolicy::Scope

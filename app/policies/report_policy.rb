@@ -2,6 +2,6 @@
 
 class ReportPolicy < ApplicationPolicy
   def view?
-    user.admin? || user.manager? || user.roles.exists?(name: "technician") # Adjust as needed
+    super_admin? || user.admin? || user.manager? || user.roles.exists?(name: "technician") # Adjust as needed
   end
 end

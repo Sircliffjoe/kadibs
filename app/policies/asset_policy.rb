@@ -12,7 +12,7 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def create?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def new?
@@ -20,7 +20,7 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def update?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def edit?
@@ -28,7 +28,7 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.has_role?(:org_admin)
+    super_admin? || user.has_role?(:org_admin)
   end
 
   def history?
@@ -40,15 +40,15 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def transfer?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def update_meter?
-    user.has_any_role?(:org_admin, :maintenance_manager, :technician)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :technician)
   end
 
   def import?
-    user.has_any_role?(:org_admin, :maintenance_manager)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager)
   end
 
   def process_import?
@@ -56,7 +56,7 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def export?
-    user.has_any_role?(:org_admin, :maintenance_manager, :auditor)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :auditor)
   end
 
   class Scope < ApplicationPolicy::Scope

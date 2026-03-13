@@ -1,0 +1,133 @@
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="logo-icon small">
+          <span style="font-size: 1.2rem; font-weight: 800; color: white;">β</span>
+        </div>
+        <span class="logo-text">KADIBS ENGINEERING</span>
+      </div>
+      <p><strong>KADIBS ENGINEERING SERVICES LIMITED</strong><br> 
+        is a premier engineering firm dedicated to delivering <br>world-class 
+        solutions in design, construction, structural maintenance, and 
+        non-destructive testing.
+      </p>
+    </div>
+    
+    <div class="footer-links-col">
+      <h4>Quick Links</h4>
+      <%= link_to "Home", root_path %>
+      <%= link_to "About Us", about_path %>
+      <%= link_to "Our Services", services_path %>
+      <%= link_to "Contact Us", contact_path %>
+      <%#= link_to "Privacy Policy", privacy_path %>
+      <%#= link_to "Terms of Service", terms_path %>
+    </div>
+    
+    <div class="footer-contact-col">
+      <h4>Contact Information</h4>
+      <p><strong>Address:</strong> Km 18 East West Rd, by Virtuous Oil Station, Cledop Close, Nkpolu- Rumuigbo, Rivers State</p>
+      <p><strong>Phone:</strong> +234 803 285 6649</p>
+      <p><strong>Email:</strong> chukadibsnigltd@yahoo.com<br/>kadibsengrgservicesltd@gmail.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <%= Time.current.year %> KADIBS ENGINEERING SERVICES LIMITED. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--dark);
+    color: var(--gray-200);
+    padding: 5rem 2rem 2rem;
+  }
+  
+  .footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+  
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo .logo-text {
+    color: var(--white);
+    font-weight: 800;
+  }
+  
+  .brand-desc {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+  }
+
+  .md-info {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .md-info strong {
+    color: var(--white);
+    font-size: 1.1rem;
+  }
+  
+  .md-info span {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+  
+  .footer-links-col h4, .footer-contact-col h4 {
+    color: var(--white);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-links-col a {
+    display: block;
+    color: var(--gray-200);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+  }
+  
+  .footer-links-col a:hover {
+    color: var(--accent);
+  }
+  
+  .footer-contact-col p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .footer-contact-col strong {
+    color: var(--white);
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+  }
+
+  @media (max-width: 992px) {
+    .footer-container { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .footer-container { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+</style>

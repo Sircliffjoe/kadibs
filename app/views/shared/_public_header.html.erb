@@ -1,0 +1,181 @@
+<!-- Public Navigation Header -->
+<nav class="nav-container" data-controller="mobile-menu">
+  <%= link_to root_path, class: "logo" do %>
+    <div class="logo-icon">
+      <span style="font-size: 1.5rem; font-weight: 800; color: white;">β</span>
+    </div>
+    <span class="logo-text">KADIBS ENGINEERING</span>
+  <% end %>
+
+  <!-- Hamburger Icon -->
+  <button class="hamburger-btn" data-action="click->mobile-menu#toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+
+  <div class="nav-links" data-mobile-menu-target="menu">
+    <% if user_signed_in? %>
+      <%= link_to "Dashboard", dashboard_path, class: "nav-link #{'active' if current_page?(dashboard_path)}" %>
+      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-outline" %>
+    <% else %>
+      <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+      <%= link_to "About", about_path, class: "nav-link #{'active' if current_page?(about_path)}" %>
+      <%= link_to "Services", services_path, class: "nav-link #{'active' if current_page?(services_path)}" %>
+      <%= link_to "Contact", contact_path, class: "nav-link #{'active' if current_page?(contact_path)}" %>
+      <%= link_to "Login", new_user_session_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</nav>
+
+<style>
+  :root {
+    --primary: #1D3557;
+    --primary-light: #457B9D;
+    --primary-dark: #0F1D33;
+    --accent: #F59E0B;
+    --accent-hover: #D97706;
+    --dark: #111827;
+    --dark-muted: #374151;
+    --light: #F9FAFB;
+    --white: #FFFFFF;
+    --gray-200: #E5E7EB;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 4rem;
+    background: var(--white);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    max-width: 250px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    color: var(--dark-muted);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: var(--primary);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--white);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3);
+  }
+
+  .hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .hamburger-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .logo-text { font-size: 0.9rem; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 1rem 1.5rem;
+    }
+
+    .hamburger-btn {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1rem;
+      box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .nav-links.active {
+      display: flex !important;
+    }
+
+    .nav-links .nav-link {
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+
+    .nav-links .btn {
+      width: 100%;
+    }
+  }
+</style>
