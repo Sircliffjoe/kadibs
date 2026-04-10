@@ -36,7 +36,7 @@
 <!-- KPI Cards -->
 <div class="rpt-kpi-grid">
   <div class="rpt-kpi-card">
-    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:var(--primary);">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
     </div>
     <div class="rpt-kpi-info">
@@ -160,7 +160,7 @@
     <% top_parts = @parts.limit(nil).order(Arel.sql("(COALESCE(quantity_on_hand, 0) * COALESCE(average_cost, 0)) DESC")).limit(10) %>
     var topNames = <%= raw top_parts.map(&:name).to_json %>;
     var topValues = <%= raw top_parts.map { |p| (p.quantity_on_hand || 0) * (p.average_cost || 0) }.to_json %>;
-    var palette = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#818cf8','#4f46e5','#7c3aed','#5b21b6','#4338ca','#3730a3'];
+    var palette = ['var(--primary)','var(--primary-light)','#a78bfa','#c4b5fd','#818cf8','#4f46e5','#7c3aed','#5b21b6','#4338ca','#3730a3'];
 
     new Chart(document.getElementById('topPartsChart'), {
       type: 'bar',

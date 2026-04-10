@@ -10,8 +10,8 @@
           <path d="M8 16L14 22L24 10" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           <defs>
             <linearGradient id="nav-gradient" x1="0" y1="0" x2="32" y2="32">
-              <stop stop-color="#6366f1"/>
-              <stop offset="1" stop-color="#8b5cf6"/>
+              <stop stop-color="var(--primary)"/>
+              <stop offset="1" stop-color="var(--primary-light)"/>
             </linearGradient>
           </defs>
         </svg>
@@ -238,7 +238,7 @@
   .logo-text {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -329,7 +329,7 @@
 
   .form-input:focus {
     outline: none;
-    border-color: #6366f1;
+    border-color: var(--primary);
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
   }
@@ -355,7 +355,7 @@
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--primary-gradient);
     color: white;
   }
 

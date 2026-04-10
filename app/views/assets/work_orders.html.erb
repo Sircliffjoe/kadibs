@@ -2,9 +2,9 @@
 
 <!-- Breadcrumb -->
 <div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:1rem;font-size:0.85rem;">
-  <%= link_to "Assets", assets_path, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <%= link_to "Assets", assets_path, style: "color:var(--primary);text-decoration:none;font-weight:500;" %>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
-  <%= link_to @asset.name, @asset, style: "color:#6366f1;text-decoration:none;font-weight:500;" %>
+  <%= link_to @asset.name, @asset, style: "color:var(--primary);text-decoration:none;font-weight:500;" %>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polyline points="9 18 15 12 9 6"/></svg>
   <span style="color:#64748b;">Work Orders</span>
 </div>
@@ -131,7 +131,7 @@
   }
   .awo-table tr:last-child td { border-bottom: none; }
   .awo-table tr:hover { background: #f8fafc; }
-  .awo-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .awo-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .awo-link:hover { text-decoration: underline; }
   .awo-mono { font-family: ui-monospace, monospace; font-weight: 600; }
   .awo-bold { font-weight: 600; }
@@ -166,7 +166,7 @@
   .awo-empty p { color: #94a3b8; font-size: 0.9rem; margin: 0; }
   .awo-create-btn {
     display: inline-flex; padding: 0.5rem 1rem; border-radius: 8px;
-    font-size: 0.82rem; font-weight: 600; background: #6366f1; color: white;
+    font-size: 0.82rem; font-weight: 600; background: var(--primary); color: white;
     text-decoration: none; transition: all 0.15s;
   }
   .awo-create-btn:hover { background: #4f46e5; }

@@ -76,7 +76,7 @@
     <div class="pm-card">
       <div class="pm-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           Schedule Details
         </h3>
       </div>
@@ -137,7 +137,7 @@
     <div class="pm-card">
       <div class="pm-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Recent Occurrences
         </h3>
       </div>
@@ -185,7 +185,7 @@
     <div class="pm-card">
       <div class="pm-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Performance
         </h3>
       </div>
@@ -211,7 +211,7 @@
     <div class="pm-card">
       <div class="pm-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Work Order History
         </h3>
       </div>
@@ -251,7 +251,7 @@
 <style>
   /* ─── PM Breadcrumb ─── */
   .pm-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .pm-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pm-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .pm-breadcrumb-link:hover { text-decoration: underline; }
   .pm-breadcrumb-current { color: #64748b; }
 
@@ -309,7 +309,7 @@
     padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
     text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
   }
-  .pm-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .pm-action-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
   .pm-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
   .pm-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
   .pm-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
@@ -350,7 +350,7 @@
   .pm-detail-sub { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
   .pm-overdue { color: #ef4444; font-weight: 600; }
   .pm-muted { color: #94a3b8; }
-  .pm-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pm-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .pm-link:hover { text-decoration: underline; }
 
   /* ─── PM Badge ─── */
@@ -367,7 +367,7 @@
   .pm-stats { display: flex; flex-direction: column; gap: 1.25rem; }
   .pm-stat { display: flex; flex-direction: column; gap: 0.15rem; }
   .pm-stat-value { font-size: 1.5rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
-  .pm-stat-accent { color: #6366f1; }
+  .pm-stat-accent { color: var(--primary); }
   .pm-stat-label { font-size: 0.8rem; color: #94a3b8; font-weight: 500; }
 
   /* ─── Tables ─── */

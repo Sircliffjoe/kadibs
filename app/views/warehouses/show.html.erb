@@ -68,7 +68,7 @@
     <div class="wh-card">
       <div class="wh-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           Warehouse Information
         </h3>
       </div>
@@ -115,7 +115,7 @@
     <div class="wh-card">
       <div class="wh-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
           Inventory Items
         </h3>
         <% if @inventory_items.any? %>
@@ -170,7 +170,7 @@
     <div class="wh-card">
       <div class="wh-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Stock Locations
         </h3>
         <% if @stock_locations.any? %>
@@ -208,7 +208,7 @@
 <style>
   /* ─── WH Breadcrumb ─── */
   .wh-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .wh-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .wh-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .wh-breadcrumb-link:hover { text-decoration: underline; }
   .wh-breadcrumb-current { color: #64748b; }
 
@@ -262,7 +262,7 @@
   }
   .wh-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
   .wh-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
-  .wh-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .wh-action-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
   .wh-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
 
   /* ─── Layout Grid ─── */
@@ -299,9 +299,9 @@
   .wh-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
   .wh-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
   .wh-detail-sub { display: block; font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
-  .wh-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .wh-mono { font-family: ui-monospace, monospace; color: var(--primary); font-weight: 600; }
   .wh-muted { color: #94a3b8; }
-  .wh-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .wh-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .wh-link:hover { text-decoration: underline; }
   .wh-bold { font-weight: 600; }
 
@@ -336,7 +336,7 @@
   .wh-loc-icon {
     width: 32px; height: 32px; border-radius: 8px;
     background: #f1f5f9; display: flex; align-items: center; justify-content: center;
-    color: #6366f1; flex-shrink: 0;
+    color: var(--primary); flex-shrink: 0;
   }
   .wh-loc-info { display: flex; flex-direction: column; }
   .wh-loc-name { font-size: 0.875rem; font-weight: 500; color: #1e293b; }

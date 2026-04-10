@@ -96,7 +96,7 @@
     <div class="pr-card">
       <div class="pr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           Requisition Details
         </h3>
       </div>
@@ -138,7 +138,7 @@
     <div class="pr-card">
       <div class="pr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
           Line Items
         </h3>
         <span class="pr-card-badge"><%= @purchase_requisition.purchase_requisition_items.count %> items</span>
@@ -183,7 +183,7 @@
     <div class="pr-card">
       <div class="pr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
           Shipping & Notes
         </h3>
       </div>
@@ -203,7 +203,7 @@
     <div class="pr-card">
       <div class="pr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Timeline
         </h3>
       </div>
@@ -245,7 +245,7 @@
 <style>
   /* ─── PR Breadcrumb ─── */
   .pr-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .pr-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pr-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .pr-breadcrumb-link:hover { text-decoration: underline; }
   .pr-breadcrumb-current { color: #64748b; }
 
@@ -307,7 +307,7 @@
     padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
     text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
   }
-  .pr-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .pr-action-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
   .pr-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
   .pr-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
   .pr-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
@@ -351,7 +351,7 @@
   .pr-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
   .pr-overdue { color: #ef4444; font-weight: 600; }
   .pr-muted { color: #94a3b8; }
-  .pr-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .pr-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .pr-link:hover { text-decoration: underline; }
   .pr-bold { font-weight: 600; }
 
@@ -379,7 +379,7 @@
     display: flex; justify-content: space-between; align-items: center;
     font-size: 0.9rem; font-weight: 600; color: #1e293b;
   }
-  .pr-total-value { font-size: 1rem; color: #6366f1; }
+  .pr-total-value { font-size: 1rem; color: var(--primary); }
 
   /* ─── Info Groups ─── */
   .pr-info-group { }
@@ -399,7 +399,7 @@
     width: 12px; height: 12px; border-radius: 50%;
     background: #cbd5e1; border: 2px solid white; box-shadow: 0 0 0 2px #e2e8f0;
   }
-  .pr-tl-blue { background: #6366f1; box-shadow: 0 0 0 2px #e0e7ff; }
+  .pr-tl-blue { background: var(--primary); box-shadow: 0 0 0 2px #e0e7ff; }
   .pr-tl-green { background: #22c55e; box-shadow: 0 0 0 2px #dcfce7; }
   .pr-tl-content { }
   .pr-tl-text { font-size: 0.85rem; color: #334155; margin: 0 0 0.15rem; line-height: 1.4; }

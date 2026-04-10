@@ -34,7 +34,7 @@
 <% total_count = @pagy.count rescue @notifications.size %>
 <div class="ntf-stats-row">
   <div class="ntf-stat-chip">
-    <div class="ntf-stat-dot" style="background:#6366f1;"></div>
+    <div class="ntf-stat-dot" style="background:var(--primary);"></div>
     <span class="ntf-stat-val"><%= total_count %></span>
     <span class="ntf-stat-label">Total</span>
   </div>
@@ -117,11 +117,11 @@
 <style>
   /* ─── Hero ─── */
   .ntf-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.25rem; }
-  .ntf-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%); }
-  .ntf-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+  .ntf-hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, var(--primary) 100%); }
+  .ntf-hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(29, 53, 87, 0.15) 0%, transparent 60%); }
   .ntf-hero-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2rem; gap: 2rem; }
   .ntf-hero-left { display: flex; align-items: center; gap: 1.25rem; }
-  .ntf-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
+  .ntf-hero-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(29, 53, 87, 0.25), rgba(69, 123, 157, 0.25)); border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; color: #a5b4fc; }
   .ntf-hero-title { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin: 0; }
   .ntf-hero-sub { font-size: 0.82rem; color: #94a3b8; margin: 0.2rem 0 0; }
   .ntf-action-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; text-decoration: none; color: #e2e8f0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: all 0.2s; }
@@ -141,21 +141,21 @@
   .ntf-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; transition: background 0.2s; }
   .ntf-item:last-child, .ntf-item:last-of-type { border-bottom: none; }
   .ntf-item:hover { background: #fafbfd; }
-  .ntf-unread { background: #f8fafc; border-left: 3px solid #6366f1; }
+  .ntf-unread { background: #f8fafc; border-left: 3px solid var(--primary); }
   .ntf-unread:hover { background: #f1f5f9; }
 
   .ntf-item-icon { width: 40px; height: 40px; border-radius: 12px; background: #f1f5f9; color: #94a3b8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .ntf-icon-unread { background: linear-gradient(135deg, #eef2ff, #e0e7ff); color: #6366f1; }
+  .ntf-icon-unread { background: linear-gradient(135deg, #f0f7ff, #e0f2fe); color: var(--primary); }
 
   .ntf-item-body { flex: 1; min-width: 0; }
   .ntf-item-text { margin: 0 0 0.25rem; color: #334155; font-size: 0.88rem; line-height: 1.5; }
   .ntf-item-text strong { color: #1e293b; }
-  .ntf-target { color: #6366f1; font-weight: 500; }
+  .ntf-target { color: var(--primary); font-weight: 500; }
   .ntf-item-time { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: #94a3b8; }
 
   .ntf-item-actions { display: flex; gap: 0.35rem; flex-shrink: 0; }
   .ntf-btn-icon { background: transparent; border: 1px solid transparent; padding: 0.4rem; border-radius: 8px; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .ntf-btn-read:hover { background: #eef2ff; color: #6366f1; border-color: #e0e7ff; }
+  .ntf-btn-read:hover { background: #f0f7ff; color: var(--primary); border-color: #e0f2fe; }
   .ntf-btn-delete:hover { background: #fef2f2; color: #ef4444; border-color: #fee2e2; }
 
   /* ─── Pagination ─── */
@@ -166,8 +166,8 @@
   .ntf-empty-icon { width: 80px; height: 80px; margin: 0 auto 1.25rem; border-radius: 20px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); display: flex; align-items: center; justify-content: center; color: #94a3b8; }
   .ntf-empty-title { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0 0 0.4rem; }
   .ntf-empty-sub { font-size: 0.88rem; color: #64748b; margin: 0 0 1.5rem; max-width: 360px; margin-left: auto; margin-right: auto; }
-  .ntf-empty-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: white; background: linear-gradient(135deg, #6366f1, #8b5cf6); text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(99,102,241,0.25); }
-  .ntf-empty-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.35); }
+  .ntf-empty-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; color: white; background: var(--primary-gradient); text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(29, 53, 87, 0.25); }
+  .ntf-empty-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29, 53, 87, 0.35); }
 
   /* ─── Responsive ─── */
   @media (max-width: 640px) {

@@ -84,7 +84,7 @@
     <div class="usr-card">
       <div class="usr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Personal Information
         </h3>
       </div>
@@ -124,7 +124,7 @@
     <div class="usr-card">
       <div class="usr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           Roles & Permissions
         </h3>
       </div>
@@ -164,7 +164,7 @@
       <div class="usr-card">
         <div class="usr-card-header">
           <h3>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             Recent Work Orders
           </h3>
           <%= link_to "View All →", work_orders_user_path(@user), class: "usr-header-link" %>
@@ -201,7 +201,7 @@
     <div class="usr-card">
       <div class="usr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Quick Stats
         </h3>
       </div>
@@ -233,7 +233,7 @@
     <div class="usr-card">
       <div class="usr-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Account
         </h3>
       </div>
@@ -265,7 +265,7 @@
 <style>
   /* ─── USR Breadcrumb ─── */
   .usr-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .usr-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .usr-breadcrumb-link:hover { text-decoration: underline; }
   .usr-breadcrumb-current { color: #64748b; }
 
@@ -288,7 +288,7 @@
   .usr-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
   .usr-hero-avatar {
     width: 64px; height: 64px; border-radius: 50%;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: var(--primary-gradient);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; color: white; font-size: 1.3rem; font-weight: 700;
     border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 4px 12px rgba(99,102,241,0.3);
@@ -342,7 +342,7 @@
     font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
     display: flex; align-items: center; gap: 0.5rem;
   }
-  .usr-header-link { font-size: 0.8rem; color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-header-link { font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 500; }
   .usr-header-link:hover { text-decoration: underline; }
   .usr-card-body { padding: 1.25rem; }
 
@@ -355,9 +355,9 @@
   .usr-detail-row:last-child { border-bottom: none; }
   .usr-detail-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
   .usr-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
-  .usr-mono { font-family: ui-monospace, monospace; color: #6366f1; font-weight: 600; }
+  .usr-mono { font-family: ui-monospace, monospace; color: var(--primary); font-weight: 600; }
   .usr-muted { color: #94a3b8; }
-  .usr-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .usr-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .usr-link:hover { text-decoration: underline; }
   .usr-bold { font-weight: 600; }
 
@@ -385,7 +385,7 @@
     flex: 1; padding: 0.5rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px;
     font-size: 0.85rem; color: #334155; background: white; min-width: 180px;
   }
-  .usr-form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+  .usr-form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
   .usr-form-btn {
     padding: 0.5rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px;
     font-size: 0.82rem; font-weight: 600; background: #f8fafc; color: #475569;
@@ -426,7 +426,7 @@
     width: 40px; height: 40px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .usr-stat-indigo { background: #eef2ff; color: #6366f1; }
+  .usr-stat-indigo { background: #eef2ff; color: var(--primary); }
   .usr-stat-blue { background: #dbeafe; color: #2563eb; }
   .usr-stat-info { display: flex; flex-direction: column; }
   .usr-stat-value { font-size: 1.35rem; font-weight: 700; color: #1e293b; line-height: 1.2; }

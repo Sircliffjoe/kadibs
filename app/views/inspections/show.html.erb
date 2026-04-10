@@ -156,7 +156,7 @@
 <style>
   /* ─── Inspection Breadcrumb ─── */
   .insp-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .insp-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .insp-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .insp-breadcrumb-link:hover { text-decoration: underline; }
   .insp-breadcrumb-current { color: #64748b; }
 
@@ -211,7 +211,7 @@
     padding: 0.6rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
     text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
   }
-  .insp-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
+  .insp-action-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
   .insp-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
   .insp-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
   .insp-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
@@ -255,7 +255,7 @@
     display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
   }
   .insp-checkbox svg { width: 13px; height: 13px; display: none; }
-  .insp-check-row.checked .insp-checkbox { background: #6366f1; border-color: #6366f1; }
+  .insp-check-row.checked .insp-checkbox { background: var(--primary); border-color: var(--primary); }
   .insp-check-row.checked .insp-checkbox svg { display: block; color: white; }
 
   .insp-check-content { flex: 1; min-width: 0; }
@@ -275,7 +275,7 @@
   .insp-info-row:last-child { border-bottom: none; }
   .insp-info-label { font-size: 0.82rem; color: #64748b; font-weight: 500; }
   .insp-info-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; }
-  .insp-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .insp-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .insp-link:hover { text-decoration: underline; }
 
   /* ─── Responsive ─── */

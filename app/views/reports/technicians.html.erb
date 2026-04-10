@@ -31,7 +31,7 @@
 <!-- KPI Summary -->
 <div class="rpt-kpi-grid">
   <div class="rpt-kpi-card">
-    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:var(--primary);">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
     </div>
     <div class="rpt-kpi-info">
@@ -92,7 +92,7 @@
             <tr>
               <td>
                 <div style="display:flex;align-items:center;gap:0.75rem;">
-                  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;flex-shrink:0;">
+                  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:0.75rem;flex-shrink:0;">
                     <%= stat[:user].first_name&.first %><%= stat[:user].last_name&.first %>
                   </div>
                   <div>

@@ -35,7 +35,7 @@
 <!-- KPI Cards -->
 <div class="rpt-kpi-grid">
   <div class="rpt-kpi-card">
-    <div class="rpt-kpi-icon" style="background:#eef2ff;color:#6366f1;">
+    <div class="rpt-kpi-icon" style="background:#eef2ff;color:var(--primary);">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
     </div>
     <div class="rpt-kpi-info">
@@ -140,7 +140,7 @@
     var statusLabels = Object.keys(statusData).map(function(s) { return s.replace(/_/g, ' ').replace(/\b\w/g, function(l) { return l.toUpperCase(); }); });
     var statusColors = Object.keys(statusData).map(function(s) {
       var c = { operational: '#10b981', under_maintenance: '#f59e0b', under_repair: '#f59e0b', out_of_service: '#ef4444', retired: '#6b7280', decommissioned: '#94a3b8' };
-      return c[s] || '#6366f1';
+      return c[s] || 'var(--primary)';
     });
 
     new Chart(document.getElementById('assetStatusChart'), {
@@ -155,7 +155,7 @@
     var catNames = <%= raw categories.to_json %>;
     var catLabels = Object.keys(catData).map(function(id) { return catNames[id] || 'Uncategorized'; });
     var catValues = Object.values(catData);
-    var palette = ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#ddd6fe','#7c3aed','#4f46e5','#818cf8'];
+    var palette = ['var(--primary)','var(--primary-light)','#a78bfa','#c4b5fd','#ddd6fe','#7c3aed','#4f46e5','#818cf8'];
 
     new Chart(document.getElementById('categoryChart'), {
       type: 'bar',

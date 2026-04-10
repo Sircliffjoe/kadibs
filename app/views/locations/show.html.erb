@@ -61,7 +61,7 @@
     <div class="loc-card">
       <div class="loc-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           Location Details
         </h3>
       </div>
@@ -110,7 +110,7 @@
     <div class="loc-card">
       <div class="loc-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           Sub-Locations
         </h3>
         <% if @child_locations.any? %>
@@ -151,7 +151,7 @@
     <div class="loc-card">
       <div class="loc-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
           Assets at this Location
         </h3>
         <% if @assets.any? %>
@@ -195,7 +195,7 @@
     <div class="loc-card">
       <div class="loc-card-header">
         <h3>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:#6366f1;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--primary);"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Overview
         </h3>
       </div>
@@ -239,7 +239,7 @@
 <style>
   /* ─── LOC Breadcrumb ─── */
   .loc-breadcrumb { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 1rem; font-size: 0.85rem; }
-  .loc-breadcrumb-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-breadcrumb-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .loc-breadcrumb-link:hover { text-decoration: underline; }
   .loc-breadcrumb-current { color: #64748b; }
 
@@ -247,7 +247,7 @@
   .loc-hero { position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
   .loc-hero-bg {
     position: absolute; inset: 0; z-index: 0;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #312e81 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, var(--primary) 100%);
   }
   .loc-hero-bg::after {
     content: ''; position: absolute; inset: 0;
@@ -262,7 +262,7 @@
   .loc-hero-left { display: flex; align-items: center; gap: 1.5rem; flex: 1; min-width: 0; }
   .loc-hero-icon {
     width: 64px; height: 64px; border-radius: 16px;
-    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    background: linear-gradient(135deg, rgba(29, 53, 87, 0.25), rgba(69, 123, 157, 0.25));
     border: 1px solid rgba(255,255,255,0.12);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; color: #a5b4fc; backdrop-filter: blur(8px);
@@ -285,8 +285,8 @@
     padding: 0.6rem 1.1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600;
     text-decoration: none; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; border: none;
   }
-  .loc-action-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 2px 8px rgba(99,102,241,0.3); }
-  .loc-action-primary:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.45); transform: translateY(-1px); }
+  .loc-action-primary { background: var(--primary-gradient); color: white; box-shadow: 0 2px 8px rgba(29, 53, 87, 0.3); }
+  .loc-action-primary:hover { box-shadow: 0 4px 16px rgba(29, 53, 87, 0.45); transform: translateY(-1px); }
   .loc-action-ghost { background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(4px); }
   .loc-action-ghost:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.25); color: white; }
 
@@ -308,7 +308,7 @@
     font-size: 0.95rem; font-weight: 600; color: #1e293b; margin: 0;
     display: flex; align-items: center; gap: 0.5rem;
   }
-  .loc-header-link { font-size: 0.8rem; color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-header-link { font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 500; }
   .loc-header-link:hover { text-decoration: underline; }
   .loc-card-body { padding: 1.25rem; }
 
@@ -322,14 +322,14 @@
   .loc-detail-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
   .loc-detail-value { font-size: 0.875rem; color: #1e293b; font-weight: 500; text-align: right; max-width: 60%; }
   .loc-muted { color: #94a3b8; }
-  .loc-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+  .loc-link { color: var(--primary); text-decoration: none; font-weight: 500; }
   .loc-link:hover { text-decoration: underline; }
   .loc-bold { font-weight: 600; }
-  .loc-map-link { font-size: 0.75rem; color: #6366f1; text-decoration: none; margin-left: 0.5rem; }
+  .loc-map-link { font-size: 0.75rem; color: var(--primary); text-decoration: none; margin-left: 0.5rem; }
   .loc-map-link:hover { text-decoration: underline; }
   .loc-root-badge {
     display: inline-flex; padding: 0.2rem 0.5rem; border-radius: 6px;
-    font-size: 0.75rem; font-weight: 600; background: #eef2ff; color: #6366f1;
+    font-size: 0.75rem; font-weight: 600; background: #f0f7ff; color: var(--primary);
   }
 
   /* ─── Tables ─── */
@@ -369,7 +369,7 @@
     width: 40px; height: 40px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .loc-stat-indigo { background: #eef2ff; color: #6366f1; }
+  .loc-stat-indigo { background: #f0f7ff; color: var(--primary); }
   .loc-stat-blue { background: #dbeafe; color: #2563eb; }
   .loc-stat-amber { background: #fef3c7; color: #d97706; }
   .loc-stat-info { display: flex; flex-direction: column; }
