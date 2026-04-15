@@ -16,18 +16,18 @@
     <div class="form-row">
       <div class="form-group">
         <%= f.label :name, class: "form-label" %>
-        <%= f.text_field :name, class: "form-input", placeholder: "Part name" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "Part Name" %>
       </div>
       <div class="form-group">
         <%= f.label :part_number, class: "form-label" %>
-        <%= f.text_field :part_number, class: "form-input", placeholder: "Part number" %>
+        <%= f.text_field :part_number, class: "form-input", placeholder: "PN-XXXXX" %>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group full">
         <%= f.label :description, class: "form-label" %>
-        <%= f.text_area :description, class: "form-input", rows: 3, placeholder: "Part description..." %>
+        <%= f.text_area :description, class: "form-input", rows: 3, placeholder: "Describe the part's use and specifications..." %>
       </div>
     </div>
 
@@ -69,7 +69,7 @@
       </div>
       <div class="form-group">
         <%= f.label :barcode, class: "form-label" %>
-        <%= f.text_field :barcode, class: "form-input", placeholder: "Barcode" %>
+        <%= f.text_field :barcode, class: "form-input", placeholder: "Scan or enter barcode" %>
       </div>
     </div>
   </div>
@@ -79,19 +79,19 @@
     
     <div class="form-row">
       <div class="form-group">
-        <%= f.label :minimum_stock, class: "form-label" %>
+        <%= f.label :minimum_stock, "Minimum Stock", class: "form-label" %>
         <%= f.number_field :minimum_stock, class: "form-input", min: 0, placeholder: "0" %>
         <span class="form-help">Alert when stock falls below this level</span>
       </div>
       <div class="form-group">
         <%= f.label :reorder_level, "Reorder Point", class: "form-label" %>
         <%= f.number_field :reorder_level, class: "form-input", min: 0, placeholder: "0" %>
-        <span class="form-help">Trigger reorder at this level</span>
+        <span class="form-help">Trigger reorder task at this level</span>
       </div>
       <div class="form-group">
         <%= f.label :lead_time_days, "Lead Time (days)", class: "form-label" %>
         <%= f.number_field :lead_time_days, class: "form-input", min: 0, placeholder: "0" %>
-        <span class="form-help">Supplier delivery time</span>
+        <span class="form-help">Supplier delivery timeframe</span>
       </div>
     </div>
   </div>

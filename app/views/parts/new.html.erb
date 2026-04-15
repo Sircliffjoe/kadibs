@@ -1,14 +1,17 @@
 <%= content_for :title, "Add Part - Kadibs" %>
 
-<div class="page-header">
-  <div class="page-header-content">
-    <div class="breadcrumb">
-      <%= link_to "Parts & Inventory", parts_path %> / New
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Parts & Inventory", parts_path %> / <span>New</span>
+      </nav>
+      <h1>Add Part</h1>
+      <p class="page-subtitle">Add a new component or material to the inventory</p>
     </div>
-    <h1>Add Part</h1>
   </div>
-</div>
 
-<div class="form-container">
-  <%= render "form", part: @part %>
+  <div class="form-container">
+    <%= render "form", part: @part %>
+  </div>
 </div>

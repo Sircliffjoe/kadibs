@@ -1,0 +1,17 @@
+<%= content_for :title, "Add Asset Category - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Equipment", assets_path %> / <%= link_to "Categories", asset_categories_path %> / <span>New</span>
+      </nav>
+      <h1>Add Asset Category</h1>
+      <p class="page-subtitle">Create a new classification for your equipment</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <%= render "form", asset_category: @asset_category %>
+  </div>
+</div>

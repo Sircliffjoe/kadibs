@@ -1,0 +1,85 @@
+<%= content_for :title, "Part Categories - Kadibs" %>
+
+<div class="page-header">
+  <div class="page-header-content">
+    <nav class="breadcrumb">
+      <%= link_to "Parts & Inventory", parts_path %> / <span>Categories</span>
+    </nav>
+    <h1>Part Categories</h1>
+    <p class="page-subtitle">Manage classification system for inventory items</p>
+  </div>
+  <div class="page-actions">
+    <%= link_to new_part_category_path, class: "btn btn-primary" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add Category
+    <% end %>
+  </div>
+</div>
+
+<div class="data-table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Parent</th>
+        <th>Parts Count</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @part_categories.any? %>
+        <% @part_categories.each do |category| %>
+          <tr>
+            <td class="font-mono"><%= category.code.presence || "—" %></td>
+            <td>
+              <div style="font-weight: 600; color: #1e293b;"><%= category.name %></div>
+              <% if category.description.present? %>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;"><%= truncate(category.description, length: 60) %></div>
+              <% end %>
+            </td>
+            <td>
+              <% if category.parent %>
+                 <span class="type-badge"><%= category.parent.name %></span>
+              <% else %>
+                <span style="color: #94a3b8; font-size: 0.8rem; font-style: italic;">Root</span>
+              <% end %>
+            </td>
+            <td>
+              <span class="stat-pill-value" style="font-size: 0.9rem;"><%= category.parts.count %></span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <%= link_to edit_part_category_path(category), class: "action-btn", title: "Edit" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <% end %>
+                <%= link_to category, data: { turbo_method: :delete, turbo_confirm: "Are you sure? This will delete the category." }, class: "action-btn text-danger", title: "Delete" do %>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="5" class="empty-table">
+            <div class="empty-state">
+              <p>No part categories defined yet.</p>
+              <%= link_to "Create your first category", new_part_category_path, class: "btn btn-primary" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @pagy && @pagy.pages > 1 %>
+  <div class="pagination-container">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>
+
+<%= render "shared/table_styles" %>

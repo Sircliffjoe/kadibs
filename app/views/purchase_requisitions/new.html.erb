@@ -4,13 +4,14 @@
   <div class="page-header">
     <div class="page-header-content">
       <nav class="breadcrumb">
-        <%= link_to "Purchase Requisitions", purchase_requisitions_path, class: "breadcrumb-item" %>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item active">New</span>
+        <%= link_to "Purchase Requisitions", purchase_requisitions_path %> / <span>New</span>
       </nav>
       <h1>New Purchase Requisition</h1>
+      <p class="page-subtitle">Create a formal request for parts or materials</p>
     </div>
   </div>
 
-  <%= render "form", purchase_requisition: @purchase_requisition %>
+  <div class="form-container">
+    <%= render "form", purchase_requisition: @purchase_requisition %>
+  </div>
 </div>

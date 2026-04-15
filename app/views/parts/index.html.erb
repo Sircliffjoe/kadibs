@@ -6,6 +6,14 @@
     <p class="page-subtitle">Track spare parts and inventory levels</p>
   </div>
   <div class="page-actions">
+    <% if policy(PartCategory).index? %>
+      <%= link_to part_categories_path, class: "btn btn-outline", style: "margin-right: 0.75rem;" do %>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+        Manage Categories
+      <% end %>
+    <% end %>
     <%= link_to new_part_path, class: "btn btn-primary" do %>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>

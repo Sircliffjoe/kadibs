@@ -1,4 +1,64 @@
 <style>
+  /* Page Layout & Containers */
+  .page-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0 0.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.025em;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0.5rem 0 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .breadcrumb a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+  }
+
+  .breadcrumb span {
+    color: #94a3b8;
+  }
+
+  .breadcrumb .separator {
+    color: #cbd5e1;
+  }
+
+  .breadcrumb .active {
+    color: #1e293b;
+    font-weight: 600;
+  }
+
   /* Form Container */
   .form-container {
     max-width: 900px;

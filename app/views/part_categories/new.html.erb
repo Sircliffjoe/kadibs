@@ -1,0 +1,17 @@
+<%= content_for :title, "Add Part Category - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Parts & Inventory", parts_path %> / <%= link_to "Categories", part_categories_path %> / <span>New</span>
+      </nav>
+      <h1>Add Part Category</h1>
+      <p class="page-subtitle">Classify your spare parts and inventory items</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <%= render "form", part_category: @part_category %>
+  </div>
+</div>

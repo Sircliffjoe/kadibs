@@ -17,7 +17,7 @@
     <div class="form-row">
       <div class="form-group">
         <%= f.label :supplier_id, class: "form-label" %>
-        <%= f.collection_select :supplier_id, Supplier.order(:name), :id, :name, { prompt: "Select Supplier" }, class: "form-select" %>
+        <%= f.collection_select :supplier_id, Supplier.order(:name), :id, :name, { prompt: "Select Supplier..." }, class: "form-select" %>
       </div>
       <div class="form-group">
         <%= f.label :required_date, "Needed By Date", class: "form-label" %>
@@ -26,25 +26,25 @@
     </div>
 
     <div class="form-row">
-      <div class="form-group full-width">
+      <div class="form-group full">
         <%= f.label :shipping_address, class: "form-label" %>
-        <%= f.text_area :shipping_address, rows: 2, class: "form-textarea" %>
+        <%= f.text_area :shipping_address, rows: 2, class: "form-input", placeholder: "Enter delivery address..." %>
       </div>
     </div>
 
     <div class="form-row">
-      <div class="form-group full-width">
+      <div class="form-group full">
         <%= f.label :notes, class: "form-label" %>
-        <%= f.text_area :notes, rows: 3, class: "form-textarea" %>
+        <%= f.text_area :notes, rows: 3, class: "form-input", placeholder: "General notes about this requisition..." %>
       </div>
     </div>
   </div>
 
   <div class="form-section">
-    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-      <h3 class="form-section-title" style="margin: 0;">Items</h3>
+    <div class="form-section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <h3 class="form-section-title" style="margin: 0;">Line Items</h3>
       <button type="button" class="btn btn-outline btn-sm" data-action="nested-form#add">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 4px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
         Add Item

@@ -1,0 +1,17 @@
+<%= content_for :title, "Edit Category - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Equipment", assets_path %> / <%= link_to "Categories", asset_categories_path %> / <%= link_to @asset_category.name, @asset_category %> / <span>Edit</span>
+      </nav>
+      <h1>Edit Asset Category</h1>
+      <p class="page-subtitle">Update classification details</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <%= render "form", asset_category: @asset_category %>
+  </div>
+</div>

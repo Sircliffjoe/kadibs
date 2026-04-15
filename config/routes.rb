@@ -116,6 +116,7 @@ Rails.application.routes.draw do
   end
 
   # Module 5: Inventory & Spare Parts
+  resources :part_categories
   resources :suppliers
   resources :warehouses do
     resources :stock_locations, shallow: true

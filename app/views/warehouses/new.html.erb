@@ -4,11 +4,14 @@
   <div class="page-header">
     <div class="page-header-content">
       <nav class="breadcrumb">
-        <%= link_to "Warehouses", warehouses_path %> / New
+        <%= link_to "Warehouses", warehouses_path %> / <span>New</span>
       </nav>
       <h1>New Warehouse</h1>
+      <p class="page-subtitle">Set up a new physical storage facility or warehouse</p>
     </div>
   </div>
 
-  <%= render "form", warehouse: @warehouse %>
+  <div class="form-container">
+    <%= render "form", warehouse: @warehouse %>
+  </div>
 </div>

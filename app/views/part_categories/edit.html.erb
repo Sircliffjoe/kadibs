@@ -1,0 +1,17 @@
+<%= content_for :title, "Edit Part Category - Kadibs" %>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <div class="page-header-content">
+      <nav class="breadcrumb">
+        <%= link_to "Parts & Inventory", parts_path %> / <%= link_to "Categories", part_categories_path %> / <%= link_to @part_category.name, @part_category %> / <span>Edit</span>
+      </nav>
+      <h1>Edit Part Category</h1>
+      <p class="page-subtitle">Update classification details</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <%= render "form", part_category: @part_category %>
+  </div>
+</div>
