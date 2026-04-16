@@ -67,7 +67,6 @@ class PmSchedulesController < ApplicationController
   def create
     @pm_schedule = PreventiveMaintenanceSchedule.new(pm_schedule_params)
     @pm_schedule.organization = current_organization
-    @pm_schedule.created_by = current_user
     authorize @pm_schedule
 
     if @pm_schedule.save
