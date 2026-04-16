@@ -47,11 +47,8 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if super_admin?
-        scope.all
-      else
-        scope.where(organization: user.organization)
-      end
+      base_scope = super_admin? ? scope.all : scope.where(organization: user.organization)
+      base_scope.kept
     end
   end
 end
