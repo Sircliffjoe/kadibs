@@ -30,8 +30,8 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
 
-  # Workforce (optional technician profile)
-  has_one :technician_profile, dependent: :destroy
+  # Workforce (no technician_profile model found)
+  # has_one :technician_profile, dependent: :destroy
 
   # Work Order relationships
   has_many :requested_work_orders, class_name: "WorkOrder", foreign_key: :requester_id
@@ -44,19 +44,19 @@ class User < ApplicationRecord
   has_many :stock_movements, dependent: :restrict_with_error
   has_many :purchase_requisitions, foreign_key: :requested_by_id
 
-  # Skills & Certifications
-  has_many :user_skills, dependent: :destroy
-  has_many :skills, through: :user_skills
-  has_many :user_certifications, dependent: :destroy
-  has_many :certifications, through: :user_certifications
+  # Skills & Certifications (no user_skills/user_certifications models found)
+  # has_many :user_skills, dependent: :destroy
+  # has_many :skills, through: :user_skills
+  # has_many :user_certifications, dependent: :destroy
+  # has_many :certifications, through: :user_certifications
 
-  # Shifts
-  has_many :user_shifts, dependent: :destroy
-  has_many :shifts, through: :user_shifts
+  # Shifts (no user_shifts model found)
+  # has_many :user_shifts, dependent: :destroy
+  # has_many :shifts, through: :user_shifts
 
   # Notifications
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
-  has_many :notification_preferences, dependent: :destroy
+  # has_many :notification_preferences, dependent: :destroy
 
   # Asset transfers
   has_many :asset_transfers, foreign_key: :transferred_by_id
@@ -64,8 +64,6 @@ class User < ApplicationRecord
   # Meter readings
   has_many :meter_readings, foreign_key: :recorded_by_id
 
-  # Sign-offs
-  has_many :sign_offs, dependent: :destroy
 
   # ==========================================================================
   # Validations
@@ -160,6 +158,19 @@ class User < ApplicationRecord
   def set_preference(key, value)
     self.preferences = preferences.merge(key.to_s => value)
     save
+  end
+
+  # Check if user has any historical records that would prevent hard deletion
+  def has_history?
+    requested_work_orders.exists? ||
+      assigned_work_orders.exists? ||
+      supervised_work_orders.exists? ||
+      work_order_labors.exists? ||
+      work_order_comments.exists? ||
+      stock_movements.exists? ||
+      purchase_requisitions.exists? ||
+      asset_transfers.exists? ||
+      meter_readings.exists?
   end
 
   # Override Devise to check if account is active

@@ -76,8 +76,16 @@ class UsersController < ApplicationController
 
   def destroy
     authorize @user
-    @user.discard
-    redirect_to users_url, notice: "User was successfully deleted."
+
+    if @user.has_history?
+      @user.discard
+      notice = "User has historical records and has been soft-deleted to preserve history."
+    else
+      @user.destroy
+      notice = "User and all associated data have been permanently deleted."
+    end
+
+    redirect_to users_url, notice: notice
   end
 
   def activate
