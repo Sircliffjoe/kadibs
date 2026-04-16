@@ -71,6 +71,7 @@ class Part < ApplicationRecord
   # ===========================================================================
   # Callbacks
   # ===========================================================================
+  before_validation :generate_part_number, if: -> { part_number.blank? }
   before_save :calculate_available_quantity
   after_save :check_reorder_alert, if: :saved_change_to_quantity_on_hand?
 
@@ -171,6 +172,17 @@ class Part < ApplicationRecord
   end
 
   private
+
+  def generate_part_number
+    prefix = "PRT"
+    loop do
+      new_number = "#{prefix}-#{SecureRandom.hex(4).upcase}"
+      unless self.class.unscoped.exists?(part_number: new_number, organization_id: organization_id)
+        self.part_number = new_number
+        break
+      end
+    end
+  end
 
   def calculate_available_quantity
     self.quantity_available = quantity_on_hand - quantity_reserved

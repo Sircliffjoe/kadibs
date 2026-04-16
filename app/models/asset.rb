@@ -74,6 +74,7 @@ class Asset < ApplicationRecord
   # ===========================================================================
   # Callbacks
   # ===========================================================================
+  before_validation :generate_code, if: -> { code.blank? }
   before_validation :upcase_code
   before_validation :generate_qr_code_data, if: -> { qr_code_data.blank? }
   after_create :calculate_current_value
@@ -177,6 +178,17 @@ class Asset < ApplicationRecord
   end
 
   private
+
+  def generate_code
+    prefix = "AST"
+    loop do
+      new_code = "#{prefix}-#{SecureRandom.hex(4).upcase}"
+      unless self.class.unscoped.exists?(code: new_code, organization_id: organization_id)
+        self.code = new_code
+        break
+      end
+    end
+  end
 
   def upcase_code
     self.code = code&.upcase
