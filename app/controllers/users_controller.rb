@@ -76,7 +76,7 @@ class UsersController < ApplicationController
 
   def destroy
     authorize @user
-    @user.destroy
+    @user.discard
     redirect_to users_url, notice: "User was successfully deleted."
   end
 
