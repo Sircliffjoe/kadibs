@@ -156,7 +156,7 @@ class WorkOrdersController < ApplicationController
       :title, :description, :work_order_type, :priority, :status, :category,
       :asset_id, :location_id, :assigned_to_id, :supervisor_id, :due_date,
       :scheduled_start, :scheduled_end, :estimated_hours, :instructions, :safety_notes,
-      :failure_code_id, :pm_schedule_id
+      :failure_code_id, :pm_schedule_id, :due_in_value, :due_in_unit
     )
   end
 

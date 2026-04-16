@@ -2,7 +2,7 @@
 
 class WorkOrderPolicy < ApplicationPolicy
   # Role slugs used in the organization
-  # org_admin, maintenance_manager, technician, storekeeper, auditor
+  # org_admin, maintenance_manager, technician, storekeeper, finance
 
   def index?
     true

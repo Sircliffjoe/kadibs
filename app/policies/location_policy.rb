@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LocationPolicy < ApplicationPolicy
-  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, auditor
+  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, finance
 
   def index?
     true

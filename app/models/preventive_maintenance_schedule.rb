@@ -225,13 +225,20 @@ class PreventiveMaintenanceSchedule < ApplicationRecord
   private
 
   def set_next_due_date
-    if time_based? || both?
-      self.next_due_date ||= start_date || Date.current
+    if (time_based? || both?) && next_due_date.blank?
+      base_date = start_date || Date.current
+      self.next_due_date = case frequency_unit
+      when "days" then base_date + frequency_value.days
+      when "weeks" then base_date + frequency_value.weeks
+      when "months" then base_date + frequency_value.months
+      when "years" then base_date + frequency_value.years
+      else base_date
+      end
     end
 
-    if meter_based? || both?
+    if (meter_based? || both?) && next_meter_due.blank?
       current_reading = asset&.meter_reading || 0
-      self.next_meter_due ||= current_reading + (meter_interval || 0)
+      self.next_meter_due = current_reading + (meter_interval || 0)
     end
   end
 

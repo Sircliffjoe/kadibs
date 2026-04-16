@@ -75,9 +75,9 @@ class ApplicationPolicy
     user&.has_role?("storekeeper")
   end
 
-  # Check if user is an auditor
-  def auditor?
-    user&.has_role?("auditor")
+  # Check if user is a finance role
+  def finance?
+    user&.has_role?("finance")
   end
 
   # Check permission using user's roles

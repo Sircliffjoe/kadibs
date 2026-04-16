@@ -54,12 +54,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.organization = current_organization
-    @user.password = SecureRandom.hex(8) # Temporary password
+    @user.password = "password123"
+    @user.password_confirmation = "password123"
     authorize @user
 
     if @user.save
-      # TODO: Send invitation email
-      redirect_to @user, notice: "User was successfully invited."
+      redirect_to @user, notice: "User was successfully created with default password: password123"
     else
       render :new, status: :unprocessable_entity
     end

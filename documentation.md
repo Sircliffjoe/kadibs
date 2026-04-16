@@ -61,7 +61,7 @@ Role-based access control:
 - Technician
 - Storekeeper
 
-Auditor / Viewer
+Finance / Viewer
 
 Full audit trail of all critical actions
 

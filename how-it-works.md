@@ -53,7 +53,7 @@ Kadibs uses **role-based access control (RBAC)**. Each user can have one or more
 | **Manager** | Maintenance manager / supervisor | Create & assign work orders, approve purchase requisitions, view reports |
 | **Technician** | Field maintenance technician | View assigned work orders, update progress, log labor/parts, upload photos |
 | **Storekeeper** | Inventory / warehouse personnel | Manage parts, process stock movements, handle purchase requisitions |
-| **Auditor / Viewer** | Read-only access | View data and reports, no editing capabilities |
+| **Finance / Viewer** | Read-only access | View data and reports, no editing capabilities |
 
 ### What Each Role Typically Sees
 
@@ -211,7 +211,7 @@ Each transition is tracked with timestamps and user attribution. Context-aware a
 **Who uses this:**
 - **Manager** — Creates work orders, assigns technicians, reviews completed work, verifies and closes
 - **Technician** — Receives assignments, starts/completes work, logs labor hours and parts used, uploads photos
-- **Auditor** — Reviews completed work orders for compliance
+- **Finance** — Reviews completed work orders for compliance
 
 ---
 
@@ -399,7 +399,7 @@ Maintenance costs are captured at multiple levels:
 
 **Who uses this:**
 - **Manager / Org Admin** — Sets budgets, monitors spending, reviews cost reports
-- **Finance / Auditor** — Reviews cost breakdowns and financial compliance
+- **Finance / Viewer** — Reviews cost breakdowns and financial compliance
 
 ---
 
@@ -436,12 +436,12 @@ Regulatory compliance checklists that must be completed periodically:
 Every critical action in the system is recorded:
 - Who did what, when, and what changed
 - Immutable maintenance history
-- Accessible to Auditors and Org Admins via the Admin panel
+- Accessible to Finance users and Org Admins via the Admin panel
 
 **Who uses this:**
 - **Manager** — Creates inspection schedules, manages safety procedures
 - **Technician** — Completes inspection checklists, follows safety procedures
-- **Auditor** — Reviews compliance records, audit logs, and inspection results
+- **Finance** — Reviews compliance records, audit logs, and inspection results
 
 ---
 
@@ -476,7 +476,7 @@ All reports support **CSV export** for external analysis in Excel, Google Sheets
 
 **Who uses this:**
 - **Manager / Org Admin** — Monitors KPIs, identifies trends, makes data-driven decisions
-- **Auditor** — Generates compliance and performance reports for regulatory submissions
+- **Finance** — Generates compliance and performance reports for regulatory submissions
 
 ---
 
@@ -615,7 +615,7 @@ Kadibs provides a full RESTful API for integration with external systems:
 3. Inspector goes through the checklist items (pass/fail each item)
 4. Inspector marks the inspection as Completed or Failed
 5. Results feed into the compliance reports
-6. Auditors can review inspection history at any time
+6. Finance users can review inspection history at any time
 ```
 
 ---

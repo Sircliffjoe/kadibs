@@ -152,9 +152,13 @@ class WorkOrder < ApplicationRecord
   # Callbacks
   # ===========================================================================
   before_validation :generate_number, on: :create
+  before_validation :set_due_date_from_interval, on: :create
   before_save :calculate_costs
   before_save :check_sla_breach
   after_save :update_asset_maintenance_date, if: -> { saved_change_to_status? && closed? }
+
+  # Virtual attributes for relative due date calculation
+  attr_accessor :due_in_value, :due_in_unit
 
   # ===========================================================================
   # Instance Methods
@@ -263,6 +267,21 @@ class WorkOrder < ApplicationRecord
   def update_asset_maintenance_date
     return unless asset.present?
     asset.update(last_maintenance_date: completed_at&.to_date || Date.current)
+  end
+
+  def set_due_date_from_interval
+    return if due_date.present?
+    return unless due_in_value.present? && due_in_unit.present?
+
+    value = due_in_value.to_i
+    return unless value.positive?
+
+    self.due_date = case due_in_unit
+    when "days" then Date.current + value.days
+    when "weeks" then Date.current + value.weeks
+    when "months" then Date.current + value.months
+    else nil
+    end
   end
 
   def has_assignee?

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AssetPolicy < ApplicationPolicy
-  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, auditor
+  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, finance
 
   def index?
     true
@@ -56,7 +56,7 @@ class AssetPolicy < ApplicationPolicy
   end
 
   def export?
-    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :auditor)
+    super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :finance)
   end
 
   class Scope < ApplicationPolicy::Scope

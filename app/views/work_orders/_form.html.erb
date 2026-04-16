@@ -154,10 +154,24 @@
           Due Date
         <% end %>
         <%= f.datetime_local_field :due_date, class: "form-input" %>
+        <span class="form-help">Select a specific date or use the "Due In" fields below</span>
       </div>
     </div>
 
     <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Due In (Optional)</label>
+        <div class="input-group" style="display: flex; gap: 8px;">
+          <%= f.number_field :due_in_value, class: "form-input", placeholder: "e.g. 1", min: 1, style: "flex: 1;" %>
+          <%= f.select :due_in_unit, 
+              options_for_select([["Days", "days"], ["Weeks", "weeks"], ["Months", "months"]], @work_order.due_in_unit || "days"), 
+              {}, 
+              class: "form-select", 
+              style: "flex: 1;" %>
+        </div>
+        <span class="form-help">Automatically sets the Due Date if left blank</span>
+      </div>
+
       <div class="form-group">
         <%= f.label :estimated_hours, class: "form-label" do %>
           Estimated Hours

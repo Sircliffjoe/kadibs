@@ -161,9 +161,9 @@ class Organization < ApplicationRecord
         }
       },
       {
-        name: "Auditor",
-        slug: "auditor",
-        description: "View-only access for compliance and audit purposes",
+        name: "Finance",
+        slug: "finance",
+        description: "View-only access to financial reports, inventory, and compliance",
         permissions: {
           "assets" => %w[read],
           "work_orders" => %w[read],

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PurchaseRequisitionPolicy < ApplicationPolicy
-  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, auditor
+  # Role slugs: org_admin, maintenance_manager, technician, storekeeper, finance
 
   def index?
     true
@@ -60,7 +60,7 @@ class PurchaseRequisitionPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      if super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :auditor)
+      if super_admin? || user.has_any_role?(:org_admin, :maintenance_manager, :storekeeper, :finance)
         scope.all
       else
         scope.where(created_by: user)
